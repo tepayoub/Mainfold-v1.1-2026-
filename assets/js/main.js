@@ -149,18 +149,33 @@
     typeNext();
   }
 
-  /* ---------- Contact form (client-side demo) ---------- */
-  var contactForm = document.getElementById("contact-form");
-  if (contactForm) {
-    contactForm.addEventListener("submit", function (e) {
+  /* ---------- Contact forms (client-side demo) ---------- */
+  document.querySelectorAll(".intake-form").forEach(function (form) {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var success = document.querySelector(".form-success");
+      var success = form.querySelector(".form-success");
       if (success) {
         success.classList.add("show");
         success.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
-      contactForm.reset();
+      form.reset();
     });
+  });
+
+  /* ---------- Audience tabs (bedrijven / consultants) ----------
+     Panel switching itself works via pure CSS :target (see style.css),
+     so it keeps working even if this script fails to load. This only
+     adds the active-button highlight as a visual enhancement. */
+  var tabButtons = document.querySelectorAll("#contact-tabs .tab-btn");
+  if (tabButtons.length) {
+    function updateActiveTab() {
+      var hash = window.location.hash.replace("#", "") || "bedrijven";
+      tabButtons.forEach(function (btn) {
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === hash);
+      });
+    }
+    updateActiveTab();
+    window.addEventListener("hashchange", updateActiveTab);
   }
 
   /* ---------- Year in footer ---------- */

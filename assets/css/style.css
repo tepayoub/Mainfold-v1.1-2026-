@@ -795,43 +795,75 @@ section { position: relative; }
 .breadcrumb a { color: var(--carbon); }
 .breadcrumb a:hover { color: var(--violet); }
 
-/* ---------- Rate table ---------- */
-.rate-table { width: 100%; border-collapse: collapse; }
-.rate-table thead tr { border-bottom: 1px solid var(--hairline); text-align: left; }
-.rate-table th {
-  padding: 12px 8px;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ash);
-  font-weight: 500;
+/* ---------- Audience tabs ----------
+   Works with zero JS: panels are toggled with the :target pseudo-class
+   against the page's own #bedrijven / #consultants anchors, so a link
+   like contact.html#consultants shows the right panel even with
+   JavaScript disabled. main.js only adds the active-button highlight
+   as a small progressive enhancement. */
+.tab-switch {
+  display: inline-flex;
+  padding: 4px;
+  background: var(--mist);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-buttons);
+  gap: 4px;
+  margin-bottom: 32px;
 }
-.rate-table td { padding: 16px 8px; }
-.rate-table tbody tr { border-bottom: 1px solid var(--hairline); }
-.rate-table tbody tr:last-child { border-bottom: none; }
-.rate-profile { font-weight: 500; }
-@media (max-width: 640px) {
-  .rate-table thead { display: none; }
-  .rate-table, .rate-table tbody, .rate-table tr, .rate-table td { display: block; width: 100%; }
-  .rate-table tr {
-    padding: 16px 4px;
-    border-bottom: 1px solid var(--hairline);
-  }
-  .rate-table td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 4px;
-    gap: 12px;
-  }
-  .rate-table td::before {
-    content: attr(data-label);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ash);
-    font-weight: 500;
-  }
+.tab-switch .tab-btn {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--carbon);
+  border-radius: var(--radius-buttons);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.tab-switch .tab-btn.active {
+  background: var(--ink);
+  color: var(--white);
+}
+.tab-panel { display: none; }
+.tab-panel.panel-default { display: block; }
+#consultants:target { display: block; }
+#consultants:target ~ .panel-default { display: none; }
+
+/* ---------- FAQ (native details/summary, works without JS) ---------- */
+.faq-item {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-inner);
+  background: var(--white);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 20px;
+  font-weight: 500;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  font-size: 18px;
+  color: var(--violet);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item .faq-body {
+  padding: 0 20px 18px;
+  color: var(--carbon);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 /* ---------- Form ---------- */
