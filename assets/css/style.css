@@ -986,6 +986,41 @@ html:not(.js) .wizard-js-only { display: none; }
 }
 .inline-link:hover { color: var(--ink); }
 
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-inner);
+  overflow: hidden;
+  background: var(--white);
+}
+.compare-table th,
+.compare-table td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 15px;
+  color: var(--carbon);
+}
+.compare-table th {
+  background: var(--ink);
+  color: var(--white);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.compare-table td:first-child,
+.compare-table th:first-child {
+  font-weight: 600;
+  color: var(--ink);
+}
+.compare-table th:first-child { color: var(--white); }
+.compare-table tr:last-child td { border-bottom: none; }
+@media (max-width: 640px) {
+  .compare-table { display: block; overflow-x: auto; }
+}
+
 /* ---------- Form ---------- */
 .form-card {
   background: var(--white);
