@@ -974,6 +974,17 @@ html:not(.js) .wizard-js-only { display: none; }
   font-size: 15px;
   line-height: 1.6;
 }
+.faq-item summary h3 {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+.inline-link {
+  color: var(--violet);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.inline-link:hover { color: var(--ink); }
 
 /* ---------- Form ---------- */
 .form-card {
