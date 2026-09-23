@@ -831,6 +831,115 @@ section { position: relative; }
 #consultants:target { display: block; }
 #consultants:target ~ .panel-default { display: none; }
 
+/* ---------- Intake wizard ----------
+   Multi-step qualifier: each answer gets an immediate confirmation that
+   Mainfold covers it, before asking for contact details at the end.
+   Requires JS (it's inherently interactive); .no-wizard-fallback covers
+   the case where JS never runs. */
+.wizard-card { position: relative; overflow: hidden; }
+.wizard-progress { margin-bottom: 28px; }
+.wizard-progress-bar {
+  height: 4px;
+  background: var(--hairline);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.wizard-progress-fill {
+  height: 100%;
+  background: var(--violet);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.wizard-step-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ash);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.wizard-step { display: none; }
+.wizard-step.active { display: block; }
+.wizard-question {
+  margin-bottom: 20px;
+}
+.wizard-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.wizard-options.single-col { grid-template-columns: 1fr; }
+.wizard-option {
+  font-family: var(--font);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-inner);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.wizard-option:hover { border-color: var(--violet-wash); }
+.wizard-option.selected {
+  border-color: var(--violet);
+  background: rgba(107, 43, 234, 0.05);
+  box-shadow: 0 0 0 1px var(--violet);
+}
+.wizard-confirm {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: rgba(175, 169, 253, 0.16);
+  border: 1px solid var(--violet-wash);
+  border-radius: var(--radius-inner);
+  font-size: 14px;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.wizard-confirm.show { opacity: 1; transform: translateY(0); }
+.wizard-confirm svg { color: var(--violet); flex-shrink: 0; margin-top: 2px; width: 18px; height: 18px; }
+.wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+}
+.wizard-nav .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.wizard-summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+.wizard-summary-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 14px;
+}
+.wizard-summary-list li:last-child { border-bottom: none; }
+.wizard-summary-list .label { color: var(--ash); }
+.wizard-summary-list .value { font-weight: 500; text-align: right; }
+.wizard-success-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(175, 169, 253, 0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.wizard-success-icon svg { color: var(--violet); width: 24px; height: 24px; }
+.no-wizard-fallback { display: none; }
+html:not(.js) .no-wizard-fallback { display: block; }
+html:not(.js) .wizard-js-only { display: none; }
+
 /* ---------- FAQ (native details/summary, works without JS) ---------- */
 .faq-item {
   border: 1px solid var(--hairline);

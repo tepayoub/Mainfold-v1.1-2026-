@@ -1,5 +1,5 @@
 /* ============================================================
-   MAINFOLD — site interactions & animations
+   MAINFOLD · site interactions & animations
    ============================================================ */
 
 (function () {
@@ -176,6 +176,133 @@
     }
     updateActiveTab();
     window.addEventListener("hashchange", updateActiveTab);
+  }
+
+  /* ---------- Intake wizard (contact.html, bedrijven panel) ----------
+     Multi-step qualifier: every answer gets an immediate "we cover
+     this" confirmation, contact details are asked only at the end.
+     The whole thing is JS-only progressive enhancement; .no-wizard-fallback
+     in the markup carries a plain always-working form when JS is off. */
+  var wizard = document.getElementById("intake-wizard");
+  if (wizard) {
+    var wizardSteps = Array.prototype.slice.call(wizard.querySelectorAll(".wizard-step"));
+    var wizardOrder = ["1", "2", "3", "4", "5"];
+    var wizardIndex = 0;
+    var wizardAnswers = {};
+
+    var wizardNext = document.getElementById("wizard-next");
+    var wizardBack = document.getElementById("wizard-back");
+    var wizardNav = document.getElementById("wizard-nav");
+    var wizardProgressFill = document.getElementById("wizard-progress-fill");
+    var wizardStepNum = document.getElementById("wizard-step-num");
+
+    function wizardShow(stepKey) {
+      wizardSteps.forEach(function (el) {
+        el.classList.toggle("active", el.getAttribute("data-step") === stepKey);
+      });
+    }
+
+    function wizardUpdateProgress() {
+      wizardProgressFill.style.width = ((wizardIndex + 1) / wizardOrder.length) * 100 + "%";
+      wizardStepNum.textContent = wizardIndex + 1;
+      wizardBack.style.visibility = wizardIndex === 0 ? "hidden" : "visible";
+    }
+
+    function wizardCheckEnabled() {
+      var stepKey = wizardOrder[wizardIndex];
+      if (stepKey === "5") {
+        var name = document.getElementById("w-name").value.trim();
+        var company = document.getElementById("w-company").value.trim();
+        var email = document.getElementById("w-email").value.trim();
+        wizardNext.disabled = !(name && company && email);
+        wizardNext.textContent = "Bekijk mijn intake-overzicht";
+      } else {
+        wizardNext.disabled = !wizardAnswers[stepKey];
+        wizardNext.textContent = "Volgende";
+      }
+    }
+
+    wizardSteps.forEach(function (stepEl) {
+      var stepKey = stepEl.getAttribute("data-step");
+      if (stepKey === "5" || stepKey === "success") return;
+      var options = stepEl.querySelectorAll(".wizard-option");
+      var confirmEl = stepEl.querySelector(".wizard-confirm");
+      var confirmText = stepEl.querySelector(".wizard-confirm-text");
+      options.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          options.forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+          wizardAnswers[stepKey] = { label: btn.textContent.trim(), confirm: btn.getAttribute("data-confirm") };
+          if (confirmText) confirmText.textContent = btn.getAttribute("data-confirm");
+          if (confirmEl) confirmEl.classList.add("show");
+          wizardCheckEnabled();
+        });
+      });
+    });
+
+    ["w-name", "w-company", "w-email", "w-phone"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener("input", wizardCheckEnabled);
+    });
+
+    function wizardBuildSummary() {
+      var nameEl = document.getElementById("wizard-thanks-name");
+      var fullName = wizardAnswers.contact.name;
+      nameEl.textContent = fullName.split(" ")[0] || fullName;
+      var list = document.getElementById("wizard-summary");
+      list.innerHTML = "";
+      var rows = [
+        ["Expertise", wizardAnswers["1"] ? wizardAnswers["1"].label : ""],
+        ["Samenwerking", wizardAnswers["2"] ? wizardAnswers["2"].label : ""],
+        ["Sector", wizardAnswers["3"] ? wizardAnswers["3"].label : ""],
+        ["Timing", wizardAnswers["4"] ? wizardAnswers["4"].label : ""],
+        ["E-mail", wizardAnswers.contact.email]
+      ];
+      rows.forEach(function (r) {
+        if (!r[1]) return;
+        var li = document.createElement("li");
+        var labelSpan = document.createElement("span");
+        labelSpan.className = "label";
+        labelSpan.textContent = r[0];
+        var valueSpan = document.createElement("span");
+        valueSpan.className = "value";
+        valueSpan.textContent = r[1];
+        li.appendChild(labelSpan);
+        li.appendChild(valueSpan);
+        list.appendChild(li);
+      });
+    }
+
+    wizardNext.addEventListener("click", function () {
+      var stepKey = wizardOrder[wizardIndex];
+      if (stepKey === "5") {
+        wizardAnswers.contact = {
+          name: document.getElementById("w-name").value.trim(),
+          company: document.getElementById("w-company").value.trim(),
+          email: document.getElementById("w-email").value.trim(),
+          phone: document.getElementById("w-phone").value.trim()
+        };
+        wizardBuildSummary();
+        wizardShow("success");
+        wizardNav.style.display = "none";
+        return;
+      }
+      wizardIndex++;
+      wizardShow(wizardOrder[wizardIndex]);
+      wizardUpdateProgress();
+      wizardCheckEnabled();
+    });
+
+    wizardBack.addEventListener("click", function () {
+      if (wizardIndex === 0) return;
+      wizardIndex--;
+      wizardShow(wizardOrder[wizardIndex]);
+      wizardUpdateProgress();
+      wizardCheckEnabled();
+    });
+
+    wizardUpdateProgress();
+    wizardCheckEnabled();
   }
 
   /* ---------- Year in footer ---------- */
