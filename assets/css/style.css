@@ -1080,21 +1080,6 @@ html:not(.js) .wizard-js-only { display: none; }
 }
 .contact-info-item .icon-badge svg { width: 18px; height: 18px; color: var(--violet); }
 
-/* ---------- Founder card ---------- */
-.founder-card {
-  text-align: left;
-}
-.founder-avatar {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--violet), var(--cyan));
-  display: flex; align-items: center; justify-content: center;
-  color: var(--white);
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 20px;
-}
-
 /* Utilities */
 .mt-0 { margin-top: 0; }
 .mb-0 { margin-bottom: 0; }
