@@ -448,15 +448,23 @@ section { position: relative; }
   display: flex;
   gap: 10px;
   align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
 }
+.terminal-footer:hover { background: var(--mist); }
+.terminal-footer:hover .terminal-input { background: var(--white); border-color: var(--violet); color: var(--ink); }
+.terminal-footer:hover .terminal-send { background: var(--violet); }
 .terminal-input {
   flex: 1;
   border: 1px solid var(--hairline);
   border-radius: 999px;
   padding: 10px 16px;
   font-size: 13px;
-  color: var(--ash);
+  font-weight: 500;
+  color: var(--ink);
   background: var(--mist);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 .terminal-send {
   width: 34px; height: 34px;
@@ -465,6 +473,7 @@ section { position: relative; }
   color: var(--white);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+  transition: background 0.15s ease;
 }
 
 /* ---------- Sector ticker ---------- */
