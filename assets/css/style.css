@@ -1,5 +1,5 @@
 /* ============================================================
-   MAINFOLD — Design system
+   MAINFOLD : Design system
    IT/OT Cybersecurity & Technology Consulting
    ============================================================ */
 
@@ -28,12 +28,12 @@
   --font: "IBM Plex Sans", Helvetica, Arial, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  --radius-cards: 14px;
-  --radius-badges: 9999px;
-  --radius-buttons: 9999px;
-  --radius-nav-pills: 18px;
-  --radius-inner: 10px;
-  --radius-sm: 6px;
+  --radius-cards: 2px;
+  --radius-badges: 2px;
+  --radius-buttons: 2px;
+  --radius-nav-pills: 2px;
+  --radius-inner: 2px;
+  --radius-sm: 2px;
 
   --shadow-subtle: rgba(0, 0, 0, 0.4) 0px 0px 1px 0px, rgba(0, 0, 0, 0.08) 0px 4px 8px 0px;
   --shadow-md: rgba(18, 22, 28, 0.04) 0px 4px 12px -4px, rgba(0, 0, 0, 0.03) 0px 1px 2px 0px;
@@ -129,7 +129,7 @@ section { position: relative; }
   content: "";
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  transform: rotate(45deg);
   background: var(--signaal);
   flex-shrink: 0;
 }
@@ -517,15 +517,25 @@ section { position: relative; }
   box-shadow: var(--shadow-md);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+.card { border-left: 1px solid var(--hairline); position: relative; }
+.card::before {
+  content: "";
+  position: absolute;
+  left: -1px; top: 0;
+  width: 3px; height: 0;
+  background: var(--signaal);
+  transition: height 0.25s ease;
+}
+.card:hover { transform: none; box-shadow: var(--shadow-md); }
+.card:hover::before { height: 100%; }
 .card .icon-badge {
-  width: 44px; height: 44px;
-  border-radius: var(--radius-inner);
+  width: 40px; height: 40px;
   background: var(--mist);
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 20px;
+  transform: rotate(45deg);
 }
-.card .icon-badge svg { width: 22px; height: 22px; color: var(--grafiet); stroke-width: 1.5; }
+.card .icon-badge svg { width: 20px; height: 20px; color: var(--grafiet); stroke-width: 1.5; transform: rotate(-45deg); }
 .card h3 { margin-bottom: 10px; }
 .card p { margin-bottom: 0; }
 .card .card-num {
@@ -561,7 +571,7 @@ section { position: relative; }
 .highlight-card {
   background: var(--mist);
   border: 1px solid var(--hairline);
-  border-radius: 20px;
+  border-top: 3px solid var(--signaal);
   padding: 40px;
 }
 .highlight-card .dot-lead {
@@ -569,7 +579,7 @@ section { position: relative; }
   margin-bottom: 18px;
 }
 .highlight-card .dot-lead span.dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--signaal);
+  width: 7px; height: 7px; transform: rotate(45deg); background: var(--signaal);
 }
 .sub-card {
   background: var(--white);
@@ -622,30 +632,74 @@ section { position: relative; }
 
 /* ---------- Quote ---------- */
 .quote-block {
-  max-width: 820px;
+  max-width: 760px;
   margin: 0 auto;
-  text-align: center;
+  text-align: left;
+  border-left: 3px solid var(--signaal);
+  padding: 4px 0 4px 32px;
 }
 .quote-block .quote-mark {
-  font-size: 60px;
-  color: var(--steen);
-  line-height: 1;
-  margin-bottom: 8px;
-  font-family: Georgia, serif;
+  display: none;
 }
 .quote-block blockquote {
-  font-size: 28px;
+  font-size: 30px;
   line-height: 1.4;
   letter-spacing: -0.3px;
-  font-weight: 500;
-  margin: 0 0 24px;
+  font-weight: 600;
+  margin: 0 0 16px;
 }
-@media (max-width: 720px) { .quote-block blockquote { font-size: 22px; } }
+@media (max-width: 720px) {
+  .quote-block { padding-left: 20px; }
+  .quote-block blockquote { font-size: 22px; }
+}
 .quote-block cite {
   font-style: normal;
-  font-size: 14px;
-  color: var(--carbon);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--leisteen);
 }
+
+/* ---------- Founder note ---------- */
+.founder-note {
+  background: var(--ink);
+  color: var(--papier);
+  padding: 48px;
+  position: relative;
+}
+.founder-note::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 40px; height: 3px;
+  background: var(--signaal);
+}
+.founder-note .founder-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--signaal);
+  display: block;
+  margin-bottom: 20px;
+}
+.founder-note p {
+  color: rgba(244,243,239,0.92);
+  font-size: 19px;
+  line-height: 1.65;
+  letter-spacing: -0.1px;
+}
+.founder-note p + p { margin-top: 18px; }
+.founder-note .founder-sign {
+  margin-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--steen);
+}
+@media (max-width: 720px) { .founder-note { padding: 32px 24px; } .founder-note p { font-size: 17px; } }
 
 /* ---------- Timeline / roadmap ---------- */
 .timeline {
