@@ -134,6 +134,7 @@ section { position: relative; }
   flex-shrink: 0;
 }
 .eyebrow.neutral::before { background: var(--ash); }
+.eyebrow.on-dark { color: rgba(244,243,239,0.75); }
 
 /* ---------- Buttons ---------- */
 .btn {
