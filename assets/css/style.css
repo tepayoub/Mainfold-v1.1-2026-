@@ -201,7 +201,7 @@ section { position: relative; }
   flex-wrap: wrap;
 }
 .top-banner .dot {
-  width: 6px; height: 6px; border-radius: 50%;
+  width: 6px; height: 6px; transform: rotate(45deg);
   background: var(--signaal); flex-shrink: 0;
 }
 
@@ -265,7 +265,7 @@ section { position: relative; }
   display: none;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: var(--radius-inner);
   border: 1px solid var(--hairline);
   background: var(--white);
   align-items: center;
@@ -361,7 +361,7 @@ section { position: relative; }
 .terminal-card {
   position: relative;
   background: var(--white);
-  border-radius: 18px;
+  border-radius: var(--radius-cards);
   box-shadow: var(--shadow-xl);
   border: 1px solid var(--hairline);
   overflow: hidden;
@@ -434,7 +434,7 @@ section { position: relative; }
 }
 .terminal-send {
   width: 34px; height: 34px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   background: var(--ink);
   color: var(--white);
   display: flex; align-items: center; justify-content: center;
@@ -725,15 +725,14 @@ section { position: relative; }
   content: "";
   position: absolute;
   top: -4px; left: 0;
-  width: 10px; height: 10px;
-  border-radius: 50%;
+  width: 8px; height: 8px;
   background: var(--signaal);
   box-shadow: 0 0 0 4px rgba(233,162,59,0.15);
-  transform: scaleX(0);
+  transform: scaleX(0) rotate(45deg);
   transform-origin: left;
   transition: transform 0.8s ease;
 }
-.timeline-step.in::after { transform: scaleX(1); }
+.timeline-step.in::after { transform: scaleX(1) rotate(45deg); }
 .timeline-step .phase-badge {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -761,7 +760,7 @@ section { position: relative; }
 
 /* ---------- CTA band ---------- */
 .cta-band {
-  border-radius: 24px;
+  border-radius: var(--radius-cards);
   padding: 64px 48px;
   text-align: center;
   position: relative;
@@ -1058,7 +1057,7 @@ html:not(.js) .wizard-js-only { display: none; }
 .form-card {
   background: var(--white);
   border: 1px solid var(--hairline);
-  border-radius: 18px;
+  border-radius: var(--radius-cards);
   padding: 40px;
   box-shadow: var(--shadow-xl);
 }
