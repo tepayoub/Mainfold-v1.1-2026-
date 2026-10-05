@@ -110,19 +110,43 @@
   /* ---------- Hero terminal typing loop ---------- */
   var terminalBody = document.getElementById("hero-terminal");
   if (terminalBody) {
-    var script = [
-      { prompt: "$", html: 'intake <span class="tag">--client</span> "industrieel bedrijf, Antwerpen"' },
-      { prompt: ">", html: 'scope gedetecteerd: <span class="tag">OT / ICS security</span>' },
-      { prompt: ">", html: 'profiel gezocht: senior consultant, 5 jaar+' },
-      { prompt: "$", html: "match --netwerk --screening" },
-      { prompt: ">", html: '<span class="ok">✓</span> kandidaat gescreend: technisch, communicatie, fit' },
-      { prompt: ">", html: '<span class="ok">✓</span> beschikbaar binnen 3 weken' },
-      { prompt: "$", html: "plaatsing bevestigen" },
-      { prompt: ">", html: '<span class="ok">✓</span> opdracht gestart, 12 maanden, NIS2 scope' },
-    ];
+    var scenarioScripts = {
+      ot: [
+        { prompt: "$", html: 'intake <span class="tag">--client</span> "industrieel bedrijf, Antwerpen"' },
+        { prompt: ">", html: 'scope gedetecteerd: <span class="tag">OT / ICS security</span>' },
+        { prompt: ">", html: "profiel gezocht: senior consultant, 5 jaar+" },
+        { prompt: "$", html: "match --screening" },
+        { prompt: ">", html: '<span class="ok">✓</span> kandidaat gescreend: technisch, communicatie, fit' },
+        { prompt: ">", html: '<span class="ok">✓</span> beschikbaar binnen 3 weken' },
+        { prompt: "$", html: "plaatsing bevestigen" },
+        { prompt: ">", html: '<span class="ok">✓</span> opdracht gestart, 12 maanden, NIS2 scope' },
+      ],
+      cloud: [
+        { prompt: "$", html: 'intake <span class="tag">--client</span> "financiële instelling, Brussel"' },
+        { prompt: ">", html: 'scope gedetecteerd: <span class="tag">cloud &amp; infra</span>' },
+        { prompt: ">", html: "profiel gezocht: cloud-architect, senior" },
+        { prompt: "$", html: "match --screening" },
+        { prompt: ">", html: '<span class="ok">✓</span> kandidaat gescreend: technisch, communicatie, fit' },
+        { prompt: ">", html: '<span class="ok">✓</span> beschikbaar binnen 2 weken' },
+        { prompt: "$", html: "plaatsing bevestigen" },
+        { prompt: ">", html: '<span class="ok">✓</span> opdracht gestart, 18 maanden, migratietraject' },
+      ],
+      compliance: [
+        { prompt: "$", html: 'intake <span class="tag">--client</span> "zorggroep, Gent"' },
+        { prompt: ">", html: 'scope gedetecteerd: <span class="tag">NIS2 / ISO 27001</span>' },
+        { prompt: ">", html: "profiel gezocht: compliance-consultant, senior" },
+        { prompt: "$", html: "match --screening" },
+        { prompt: ">", html: '<span class="ok">✓</span> kandidaat gescreend: technisch, communicatie, fit' },
+        { prompt: ">", html: '<span class="ok">✓</span> beschikbaar binnen 3 weken' },
+        { prompt: "$", html: "plaatsing bevestigen" },
+        { prompt: ">", html: '<span class="ok">✓</span> opdracht gestart, 9 maanden, auditvoorbereiding' },
+      ],
+    };
+    var currentScenario = "ot";
     var lineIndex = 0;
     var linesOnScreen = [];
     var maxLines = 7;
+    var typingTimer = null;
 
     function renderLines() {
       terminalBody.innerHTML = linesOnScreen
@@ -139,14 +163,116 @@
     }
 
     function typeNext() {
+      var script = scenarioScripts[currentScenario];
       var entry = script[lineIndex % script.length];
       linesOnScreen.push(entry);
       if (linesOnScreen.length > maxLines) linesOnScreen.shift();
       renderLines();
       lineIndex++;
-      setTimeout(typeNext, 1500);
+      typingTimer = setTimeout(typeNext, 1500);
     }
+
+    function switchScenario(key) {
+      if (key === currentScenario || !scenarioScripts[key]) return;
+      currentScenario = key;
+      lineIndex = 0;
+      linesOnScreen = [];
+      if (typingTimer) clearTimeout(typingTimer);
+      typeNext();
+    }
+
+    document.querySelectorAll(".scenario-chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        document.querySelectorAll(".scenario-chip").forEach(function (c) {
+          c.classList.toggle("active", c === chip);
+          c.setAttribute("aria-selected", c === chip ? "true" : "false");
+        });
+        switchScenario(chip.getAttribute("data-scenario"));
+      });
+    });
+
     typeNext();
+  }
+
+  /* ---------- NIS2-check quiz (nis2-check.html) ---------- */
+  var nis2Wizard = document.getElementById("nis2-wizard");
+  if (nis2Wizard) {
+    var nis2Order = ["1", "2", "3", "4", "result"];
+    var nis2Index = 0;
+    var nis2Score = 0;
+    var nis2Readiness = "";
+    var nis2Steps = Array.prototype.slice.call(nis2Wizard.querySelectorAll(".wizard-step"));
+    var nis2ProgressFill = document.getElementById("nis2-progress-fill");
+    var nis2StepNum = document.getElementById("nis2-step-num");
+    var nis2TitleEl = document.getElementById("nis2-result-title");
+    var nis2BodyEl = document.getElementById("nis2-result-body");
+
+    function nis2Show(stepKey) {
+      nis2Steps.forEach(function (el) {
+        el.classList.toggle("active", el.getAttribute("data-nis2-step") === stepKey);
+      });
+    }
+
+    function nis2UpdateProgress() {
+      var pct = Math.min(((nis2Index + 1) / 4) * 100, 100);
+      if (nis2ProgressFill) nis2ProgressFill.style.width = pct + "%";
+      if (nis2StepNum) nis2StepNum.textContent = Math.min(nis2Index + 1, 4);
+    }
+
+    function nis2ShowResult() {
+      var title, body;
+      if (nis2Score >= 6) {
+        title = "Hoge kans dat uw organisatie onder NIS2 valt.";
+        body = "Op basis van uw antwoorden lijkt uw organisatie te passen in het profiel van een essentiële of belangrijke entiteit onder NIS2. Een gerichte intake brengt de exacte scope en verplichtingen in kaart.";
+      } else if (nis2Score >= 3) {
+        title = "Mogelijk relevant, ook als het niet meteen duidelijk is.";
+        body = "Uw organisatie valt mogelijk rechtstreeks onder NIS2, of krijgt de eisen doorgeschoven via klanten of leveranciersketens. Het loont om dit nu uit te klaren in plaats van af te wachten.";
+      } else {
+        title = "Op basis van deze antwoorden wellicht niet rechtstreeks.";
+        body = "Uw organisatie lijkt op dit moment niet het meest voor de hand liggende profiel voor NIS2. Toch kunnen eisen van klanten of toekomstige groei dit doen veranderen, dus blijf dit opvolgen.";
+      }
+      if (nis2Readiness === "nog niet gestart") {
+        body += " Omdat u nog niet gestart bent, is een gap-analyse een logische eerste stap.";
+      } else if (nis2Readiness === "gap-analyse") {
+        body += " U bent al bezig met een gap-analyse, wat het gesprek meteen concreter maakt.";
+      } else if (nis2Readiness === "grotendeels klaar") {
+        body += " U staat al ver; een externe toetsing kan de puzzel vervolledigen.";
+      }
+      if (nis2TitleEl) nis2TitleEl.textContent = title;
+      if (nis2BodyEl) nis2BodyEl.textContent = body;
+    }
+
+    function nis2Restart() {
+      nis2Index = 0;
+      nis2Score = 0;
+      nis2Readiness = "";
+      nis2Show(nis2Order[0]);
+      nis2UpdateProgress();
+    }
+
+    nis2Steps.forEach(function (stepEl) {
+      var options = stepEl.querySelectorAll(".wizard-option");
+      options.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var val = btn.getAttribute("data-value");
+          var readiness = btn.getAttribute("data-readiness");
+          if (val !== null) nis2Score += parseInt(val, 10);
+          if (readiness !== null) nis2Readiness = readiness;
+          nis2Index++;
+          if (nis2Order[nis2Index] === "result") {
+            nis2ShowResult();
+          }
+          nis2Show(nis2Order[nis2Index]);
+          nis2UpdateProgress();
+        });
+      });
+    });
+
+    var nis2RestartBtn = document.getElementById("nis2-restart");
+    if (nis2RestartBtn) nis2RestartBtn.addEventListener("click", nis2Restart);
+
+    nis2Show(nis2Order[0]);
+    nis2UpdateProgress();
   }
 
   /* ---------- Contact forms (client-side demo) ---------- */

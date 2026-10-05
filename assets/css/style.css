@@ -358,6 +358,33 @@ section { position: relative; }
 }
 .mini-badge svg { width: 13px; height: 13px; flex-shrink: 0; color: var(--grafiet); }
 
+/* ---------- Terminal scenario picker ---------- */
+.terminal-scenarios {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.scenario-chip {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--hairline);
+  background: var(--white);
+  color: var(--leisteen);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.scenario-chip:hover { border-color: var(--signaal); color: var(--ink); }
+.scenario-chip.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+
 /* ---------- Terminal widget ---------- */
 .terminal-card {
   position: relative;
