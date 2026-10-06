@@ -107,91 +107,70 @@
     });
   }, 3200);
 
-  /* ---------- Hero terminal typing loop ---------- */
-  var terminalBody = document.getElementById("hero-terminal");
-  if (terminalBody) {
-    var scenarioScripts = {
-      ot: [
-        { prompt: "$", html: 'intake <span class="tag">--client</span> "industrieel bedrijf, Antwerpen"' },
-        { prompt: ">", html: 'scope gedetecteerd: <span class="tag">OT / ICS security</span>' },
-        { prompt: ">", html: "profiel gezocht: senior consultant, 5 jaar+" },
-        { prompt: "$", html: "match --screening" },
-        { prompt: ">", html: '<span class="ok">✓</span> kandidaat gescreend: technisch, communicatie, fit' },
-        { prompt: ">", html: '<span class="ok">✓</span> beschikbaar binnen 3 weken' },
-        { prompt: "$", html: "plaatsing bevestigen" },
-        { prompt: ">", html: '<span class="ok">✓</span> opdracht gestart, 12 maanden, NIS2 scope' },
-      ],
-      cloud: [
-        { prompt: "$", html: 'intake <span class="tag">--client</span> "financiële instelling, Brussel"' },
-        { prompt: ">", html: 'scope gedetecteerd: <span class="tag">cloud &amp; infra</span>' },
-        { prompt: ">", html: "profiel gezocht: cloud-architect, senior" },
-        { prompt: "$", html: "match --screening" },
-        { prompt: ">", html: '<span class="ok">✓</span> kandidaat gescreend: technisch, communicatie, fit' },
-        { prompt: ">", html: '<span class="ok">✓</span> beschikbaar binnen 2 weken' },
-        { prompt: "$", html: "plaatsing bevestigen" },
-        { prompt: ">", html: '<span class="ok">✓</span> opdracht gestart, 18 maanden, migratietraject' },
-      ],
-      compliance: [
-        { prompt: "$", html: 'intake <span class="tag">--client</span> "zorggroep, Gent"' },
-        { prompt: ">", html: 'scope gedetecteerd: <span class="tag">NIS2 / ISO 27001</span>' },
-        { prompt: ">", html: "profiel gezocht: compliance-consultant, senior" },
-        { prompt: "$", html: "match --screening" },
-        { prompt: ">", html: '<span class="ok">✓</span> kandidaat gescreend: technisch, communicatie, fit' },
-        { prompt: ">", html: '<span class="ok">✓</span> beschikbaar binnen 3 weken' },
-        { prompt: "$", html: "plaatsing bevestigen" },
-        { prompt: ">", html: '<span class="ok">✓</span> opdracht gestart, 9 maanden, auditvoorbereiding' },
-      ],
-    };
-    var currentScenario = "ot";
-    var lineIndex = 0;
-    var linesOnScreen = [];
-    var maxLines = 7;
-    var typingTimer = null;
+  /* ---------- Hero matching console (.mf, index.html) ---------- */
+  var mfWidget = document.getElementById("mf");
+  if (mfWidget) {
+    var mfScenarios = [
+      { dom: "IT × OT", sec: "Industrie", f: ["OT Security Engineer", "Structureel · 12 maanden", "IEC 62443", "Antwerpen"], code: "MF-OT-042", lvl: "Match · senior" },
+      { dom: "Cloud", sec: "Financiële instelling", f: ["Cloud Engineer", "Project · migratie Azure", "ISO 27001", "Brussel"], code: "MF-CL-017", lvl: "Match · senior" },
+      { dom: "Security", sec: "Energie en nuts", f: ["SOC Analyst", "Structureel · 18 maanden", "24/7 monitoring", "Gent"], code: "MF-SC-008", lvl: "Match · medior" },
+      { dom: "Security", sec: "Overheid", f: ["Penetration Tester", "Ad-hoc · 2 weken", "OWASP · red team", "Leuven"], code: "MF-PT-031", lvl: "Match · senior" },
+      { dom: "Governance", sec: "Zorg", f: ["GRC Consultant", "Structureel · 9 maanden", "ISO 27001 · risicobeheer", "Hasselt"], code: "MF-GR-023", lvl: "Match · senior" },
+      { dom: "IT × OT", sec: "Logistiek", f: ["Solution Architect", "Project · netwerksegmentatie", "IEC 62443 · zero trust", "Mechelen"], code: "MF-AR-011", lvl: "Match · senior" },
+    ];
+    (function () {
+      var mf = mfWidget;
+      var $ = function (id) { return document.getElementById(id); };
+      var rows = mf.querySelectorAll(".row");
+      var bars = $("mf-list").children;
+      var i = 0;
+      var timers = [];
+      var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    function renderLines() {
-      terminalBody.innerHTML = linesOnScreen
-        .map(function (l, i) {
-          var isLast = i === linesOnScreen.length - 1;
-          return (
-            '<div class="terminal-line" style="animation-delay:0s">' +
-            '<span class="prompt">' + l.prompt + "</span>" +
-            '<span>' + l.html + (isLast ? '<span class="terminal-caret"></span>' : "") + "</span>" +
-            "</div>"
-          );
-        })
-        .join("");
-    }
+      function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
 
-    function typeNext() {
-      var script = scenarioScripts[currentScenario];
-      var entry = script[lineIndex % script.length];
-      linesOnScreen.push(entry);
-      if (linesOnScreen.length > maxLines) linesOnScreen.shift();
-      renderLines();
-      lineIndex++;
-      typingTimer = setTimeout(typeNext, 1500);
-    }
+      function fill(s) {
+        $("mf-dom").textContent = s.dom;
+        $("mf-sec").textContent = s.sec;
+        $("mf-code").textContent = s.code;
+        $("mf-lvl").textContent = s.lvl;
+        s.f.forEach(function (v, k) { $("mf-f" + k).textContent = v; });
+        $("mf-idx").textContent = ("0" + (i + 1)).slice(-2) + " / 0" + mfScenarios.length;
+      }
 
-    function switchScenario(key) {
-      if (key === currentScenario || !scenarioScripts[key]) return;
-      currentScenario = key;
-      lineIndex = 0;
-      linesOnScreen = [];
-      if (typingTimer) clearTimeout(typingTimer);
-      typeNext();
-    }
+      function run() {
+        var s = mfScenarios[i];
+        fill(s);
+        if (reduceMotion) {
+          mf.classList.add("joined", "matched");
+          rows.forEach(function (r) { r.classList.add("on"); });
+          return;
+        }
+        mf.classList.remove("matched", "scanning");
+        rows.forEach(function (r) { r.classList.remove("on"); });
+        for (var b = 0; b < bars.length; b++) bars[b].className = "";
+        at(150, function () { mf.classList.add("joined"); });
+        rows.forEach(function (r, k) { at(500 + k * 320, function () { r.classList.add("on"); }); });
+        at(1900, function () { mf.classList.add("scanning"); });
+        var hit = 3 + Math.floor(Math.random() * 8);
+        for (var b2 = 0; b2 <= hit; b2++) {
+          (function (n) { at(2000 + n * 90, function () { bars[n].className = n === hit ? "hit" : "seen"; }); })(b2);
+        }
+        at(2200 + hit * 90, function () { mf.classList.add("matched"); });
+        at(6200, function () { mf.classList.remove("matched"); rows.forEach(function (r) { r.classList.remove("on"); }); });
+        at(6900, function () { i = (i + 1) % mfScenarios.length; run(); });
+      }
 
-    document.querySelectorAll(".scenario-chip").forEach(function (chip) {
-      chip.addEventListener("click", function () {
-        document.querySelectorAll(".scenario-chip").forEach(function (c) {
-          c.classList.toggle("active", c === chip);
-          c.setAttribute("aria-selected", c === chip ? "true" : "false");
-        });
-        switchScenario(chip.getAttribute("data-scenario"));
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          timers.forEach(clearTimeout);
+          timers = [];
+        } else {
+          run();
+        }
       });
-    });
-
-    typeNext();
+      run();
+    })();
   }
 
   /* ---------- NIS2-check quiz (nis2-check.html) ---------- */

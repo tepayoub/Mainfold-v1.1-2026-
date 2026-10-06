@@ -145,26 +145,29 @@
       </div>
 
       <div class="hero-widget">
-        <div class="terminal-scenarios" role="tablist" aria-label="Voorbeeldscenario's">
-          <button type="button" class="scenario-chip active" data-scenario="ot" role="tab" aria-selected="true">OT-security</button>
-          <button type="button" class="scenario-chip" data-scenario="cloud" role="tab" aria-selected="false">Cloud-migratie</button>
-          <button type="button" class="scenario-chip" data-scenario="compliance" role="tab" aria-selected="false">Compliance</button>
-        </div>
-        <div class="terminal-card">
-          <div class="terminal-head">
-            <span class="terminal-dot r"></span>
-            <span class="terminal-dot y"></span>
-            <span class="terminal-dot g"></span>
-            <span class="terminal-title">mainfold · matching console</span>
+        <div class="mf" id="mf">
+          <div class="in">
+            <div class="top"><span class="dot"><i></i>matching console</span><span id="mf-idx">01 / 06</span></div>
+            <div class="mid">
+              <div class="mark"><svg viewBox="-4 -4 72 56">
+                <polygon class="it" points="24,0 48,24 24,48 0,24" fill="none" stroke="#F4F3EF" stroke-width="2.4" stroke-linejoin="round"/>
+                <polygon class="ot" points="40,0 64,24 40,48 16,24" fill="none" stroke="#F4F3EF" stroke-width="2.4" stroke-linejoin="round"/>
+                <polygon class="core" points="32,8 48,24 32,40 16,24" fill="#E9A23B"/>
+              </svg></div>
+              <div class="stat"><b id="mf-dom">IT × OT</b><span id="mf-sec">Industrie</span></div>
+            </div>
+            <div class="con">
+              <div class="row"><span>Vraag</span><span id="mf-f0"></span></div>
+              <div class="row"><span>Inzet</span><span id="mf-f1"></span></div>
+              <div class="row"><span>Kader</span><span id="mf-f2"></span></div>
+              <div class="row"><span>Regio</span><span id="mf-f3"></span></div>
+              <div class="scan"></div>
+            </div>
+            <div class="list" id="mf-list"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="match"><b id="mf-code">MF-OT-042</b><em id="mf-lvl">Match · senior</em></div>
           </div>
-          <div class="terminal-body" id="hero-terminal"></div>
-          <a href="contact.html#bedrijven" class="terminal-footer">
-            <span class="terminal-input">Start uw intake-scan</span>
-            <span class="terminal-send">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </span>
-          </a>
         </div>
+        <a href="contact.html#bedrijven" class="link-arrow" style="justify-content:center; margin-top:16px;">Start uw eigen intake-scan →</a>
       </div>
     </div>
   </section>
