@@ -131,6 +131,7 @@ $subjectMap = [
     'contact-consultants' => 'Nieuwe consultant-aanmelding',
     'aanmelden-consultants' => 'Nieuwe consultant-aanmelding',
     'nis2-check' => 'Nieuwe NIS2-check inzending',
+    'gratis-scan' => 'Nieuwe gratis expertise-scan inzending',
     'looptijd-slider' => 'Nieuwe looptijd-check inzending',
 ];
 $subject = ($subjectMap[$source] ?? 'Nieuwe inzending') . ' · ' . $name;

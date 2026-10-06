@@ -328,6 +328,177 @@
     nis2UpdateProgress();
   }
 
+  /* ---------- Gratis expertise-scan (gratis-scan.html) ----------
+     Breder dan de NIS2-check: 6 vragen die samen een resultaattekst
+     opbouwen uit losse bouwstenen (pijnpunt + aanpak + urgentie +
+     sector/OT), in plaats van een vast aantal uitkomsten, zodat het
+     resultaat per combinatie van antwoorden anders aanvoelt. */
+  var scanWizard = document.getElementById("scan-wizard");
+  if (scanWizard) {
+    var scanOrder = ["1", "2", "3", "4", "5", "6", "result"];
+    var scanIndex = 0;
+    var scanAnswers = [];
+    var scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", aanpak: "", urgentie: "" };
+    var scanResultLabel = "";
+    var scanSteps = Array.prototype.slice.call(scanWizard.querySelectorAll(".wizard-step"));
+    var scanProgressFill = document.getElementById("scan-progress-fill");
+    var scanStepNum = document.getElementById("scan-step-num");
+    var scanTitleEl = document.getElementById("scan-result-title");
+    var scanBodyEl = document.getElementById("scan-result-body");
+
+    var scanSectorLabels = {
+      energie: "Energie & nutsvoorzieningen", financieel: "de financiële sector", ict: "digitale infrastructuur & ICT",
+      industrie: "industrie & productie", overheid: "de overheid", andere: "uw sector",
+    };
+    var scanPainpoints = {
+      capaciteit: {
+        title: "Het grootste gat zit in capaciteit, niet in kennis.",
+        body: "Uw team weet wat er moet gebeuren, maar mist de uren om het structureel op te volgen naast de dagelijkse werking.",
+      },
+      compliance: {
+        title: "Compliance-druk bepaalt nu de agenda.",
+        body: "Regelgeving zoals NIS2, DORA of ISO 27001 vraagt een aantoonbare aanpak, niet enkel goede intenties.",
+      },
+      project: {
+        title: "Een concreet project zet de klok.",
+        body: "Een geplande migratie of uitrol brengt tijdelijk extra expertise in beeld die niet standaard in het team zit.",
+      },
+      cloud: {
+        title: "Cloud- en infrastructuurrisico is de grootste onzekerheid.",
+        body: "De omgeving is de voorbije jaren complexer geworden, en het overzicht over wie waarvoor verantwoordelijk is, ontbreekt soms.",
+      },
+      onduidelijk: {
+        title: "Een brede doorlichting is het logische startpunt.",
+        body: "Zonder een helder beeld van de huidige situatie is elke volgende stap gokwerk.",
+      },
+    };
+    var scanAanpakModifiers = {
+      "geen-specialist": " Zonder interne securityspecialist valt dit nu vaak tussen de mazen van andere prioriteiten.",
+      "tekort": " Het bestaande team erkent dit zelf, maar krijgt er simpelweg de tijd niet voor vrij.",
+      "extern-ontevreden": " De huidige externe aanpak levert blijkbaar niet wat nodig is, en dat is op zich al waardevolle informatie.",
+    };
+    var scanUrgentieModifiers = {
+      dringend: " Omdat dit nu dringend is, loont een gesprek deze week meer dan een maand wachten.",
+      binnenkort: " Met enkele maanden speelruimte is er nog tijd om dit gestructureerd aan te pakken in plaats van te improviseren.",
+      orienterend: " Zonder directe druk is dit het moment om rustig te verkennen wat wel en niet nodig is, zonder verkoopdruk.",
+    };
+
+    function scanShow(stepKey) {
+      scanSteps.forEach(function (el) {
+        el.classList.toggle("active", el.getAttribute("data-scan-step") === stepKey);
+      });
+    }
+
+    function scanUpdateProgress() {
+      var pct = Math.min(((scanIndex + 1) / 6) * 100, 100);
+      if (scanProgressFill) scanProgressFill.style.width = pct + "%";
+      if (scanStepNum) scanStepNum.textContent = Math.min(scanIndex + 1, 6);
+    }
+
+    function scanShowResult() {
+      var p = scanPainpoints[scanData.pijnpunt] || scanPainpoints.onduidelijk;
+      var title = p.title;
+      var body = p.body;
+      body += scanAanpakModifiers[scanData.aanpak] || "";
+      body += scanUrgentieModifiers[scanData.urgentie] || "";
+      var sectorLabel = scanSectorLabels[scanData.sector] || "uw sector";
+      if (scanData.ot === "ot" || scanData.ot === "it-ot") {
+        body += " Binnen " + sectorLabel + ", met operationele technologie in de mix, is die combinatie van IT- en OT-kennis precies waar Mainfold het verschil maakt.";
+      } else {
+        body += " Binnen " + sectorLabel + " is senior IT- en cloudsecurityexpertise dan het meest relevante vertrekpunt.";
+      }
+      scanResultLabel = title;
+      if (scanTitleEl) scanTitleEl.textContent = title;
+      if (scanBodyEl) scanBodyEl.textContent = body;
+    }
+
+    function scanRestart() {
+      scanIndex = 0;
+      scanAnswers = [];
+      scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", aanpak: "", urgentie: "" };
+      var leadForm = document.getElementById("scan-lead-form");
+      var leadSuccess = document.getElementById("scan-lead-success");
+      var leadError = document.getElementById("scan-lead-error");
+      if (leadForm) leadForm.style.display = "";
+      if (leadSuccess) leadSuccess.classList.remove("show");
+      if (leadError) leadError.classList.remove("show");
+      scanShow(scanOrder[0]);
+      scanUpdateProgress();
+    }
+
+    var scanDataKeys = ["sector", "grootte", "ot", "pijnpunt", "aanpak", "urgentie"];
+    scanSteps.forEach(function (stepEl, i) {
+      var questionEl = stepEl.querySelector(".wizard-question");
+      var options = stepEl.querySelectorAll(".wizard-option");
+      options.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var key = scanDataKeys[i];
+          if (key) {
+            var val = btn.getAttribute("data-" + key);
+            if (val !== null) scanData[key] = val;
+          }
+          scanAnswers.push([questionEl ? questionEl.textContent.trim() : "Vraag", btn.textContent.trim()]);
+          scanIndex++;
+          if (scanOrder[scanIndex] === "result") {
+            scanShowResult();
+          }
+          scanShow(scanOrder[scanIndex]);
+          scanUpdateProgress();
+        });
+      });
+    });
+
+    var scanRestartBtn = document.getElementById("scan-restart");
+    if (scanRestartBtn) scanRestartBtn.addEventListener("click", scanRestart);
+
+    var scanSendBtn = document.getElementById("scan-send");
+    if (scanSendBtn) {
+      scanSendBtn.addEventListener("click", function () {
+        var nameEl = document.getElementById("scan-name");
+        var emailEl = document.getElementById("scan-email");
+        var websiteEl = document.getElementById("scan-website");
+        var leadError = document.getElementById("scan-lead-error");
+        var leadSuccess = document.getElementById("scan-lead-success");
+        var name = nameEl ? nameEl.value.trim() : "";
+        var email = emailEl ? emailEl.value.trim() : "";
+        if (leadError) leadError.classList.remove("show");
+        if (!name || !email) {
+          if (leadError) leadError.classList.add("show");
+          return;
+        }
+        var details = scanAnswers.slice();
+        details.push(["Resultaat", scanResultLabel]);
+        scanSendBtn.disabled = true;
+        mfSendLead({
+          source: "gratis-scan",
+          name: name,
+          email: email,
+          website: websiteEl ? websiteEl.value : "",
+          details: details,
+        }).then(function (ok) {
+          scanSendBtn.disabled = false;
+          if (ok) {
+            var leadFormEl = document.getElementById("scan-lead-form");
+            if (nameEl) nameEl.closest(".form-row").style.display = "none";
+            if (leadFormEl) {
+              var heading = leadFormEl.querySelector("h3");
+              var sub = leadFormEl.querySelector("p");
+              if (heading) heading.style.display = "none";
+              if (sub) sub.style.display = "none";
+            }
+            scanSendBtn.style.display = "none";
+            if (leadSuccess) leadSuccess.classList.add("show");
+          } else if (leadError) {
+            leadError.classList.add("show");
+          }
+        });
+      });
+    }
+
+    scanShow(scanOrder[0]);
+    scanUpdateProgress();
+  }
+
   /* ---------- Looptijd slider (.ls, diensten.html) ---------- */
   var lsRange = document.getElementById("ls-r");
   if (lsRange) {
