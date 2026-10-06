@@ -338,7 +338,7 @@
     var scanOrder = ["1", "2", "3", "4", "5", "6", "result"];
     var scanIndex = 0;
     var scanAnswers = [];
-    var scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", aanpak: "", urgentie: "" };
+    var scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", samenwerking: "", urgentie: "" };
     var scanResultLabel = "";
     var scanSteps = Array.prototype.slice.call(scanWizard.querySelectorAll(".wizard-step"));
     var scanProgressFill = document.getElementById("scan-progress-fill");
@@ -372,10 +372,27 @@
         body: "Zonder een helder beeld van de huidige situatie is elke volgende stap gokwerk.",
       },
     };
-    var scanAanpakModifiers = {
-      "geen-specialist": " Zonder interne securityspecialist valt dit nu vaak tussen de mazen van andere prioriteiten.",
-      "tekort": " Het bestaande team erkent dit zelf, maar krijgt er simpelweg de tijd niet voor vrij.",
-      "extern-ontevreden": " De huidige externe aanpak levert blijkbaar niet wat nodig is, en dat is op zich al waardevolle informatie.",
+    var scanSamenwerkingInfo = {
+      adhoc: {
+        sentence: " Dat wijst naar ad-hoc inzet: senior expertise die snel inzetbaar is voor een acute nood.",
+        linkText: "Meer over ad-hoc inzet →",
+        href: "diensten.html#ad-hoc-inzet",
+      },
+      project: {
+        sentence: " Dat wijst naar een project: een volledig team met kwaliteits- en timingopvolging vanuit Mainfold.",
+        linkText: "Meer over projecten →",
+        href: "diensten.html#projecten",
+      },
+      structureel: {
+        sentence: " Dat wijst naar een structurele plaatsing: iemand die zes tot vierentwintig maanden naadloos meedraait.",
+        linkText: "Meer over structurele plaatsing →",
+        href: "diensten.html#structurele-plaatsing",
+      },
+      onduidelijk: {
+        sentence: " Welk type samenwerking het best past, is op dit moment nog niet duidelijk, en dat is prima: een intake brengt dat vanzelf in kaart.",
+        linkText: "Bekijk alle diensten →",
+        href: "diensten.html",
+      },
     };
     var scanUrgentieModifiers = {
       dringend: " Omdat dit nu dringend is, loont een gesprek deze week meer dan een maand wachten.",
@@ -399,7 +416,6 @@
       var p = scanPainpoints[scanData.pijnpunt] || scanPainpoints.onduidelijk;
       var title = p.title;
       var body = p.body;
-      body += scanAanpakModifiers[scanData.aanpak] || "";
       body += scanUrgentieModifiers[scanData.urgentie] || "";
       var sectorLabel = scanSectorLabels[scanData.sector] || "uw sector";
       if (scanData.ot === "ot" || scanData.ot === "it-ot") {
@@ -407,15 +423,22 @@
       } else {
         body += " Binnen " + sectorLabel + " is senior IT- en cloudsecurityexpertise dan het meest relevante vertrekpunt.";
       }
+      var sw = scanSamenwerkingInfo[scanData.samenwerking] || scanSamenwerkingInfo.onduidelijk;
+      body += sw.sentence;
       scanResultLabel = title;
       if (scanTitleEl) scanTitleEl.textContent = title;
       if (scanBodyEl) scanBodyEl.textContent = body;
+      var linkEl = document.getElementById("scan-result-link");
+      if (linkEl) {
+        linkEl.textContent = sw.linkText;
+        linkEl.setAttribute("href", sw.href);
+      }
     }
 
     function scanRestart() {
       scanIndex = 0;
       scanAnswers = [];
-      scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", aanpak: "", urgentie: "" };
+      scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", samenwerking: "", urgentie: "" };
       var leadForm = document.getElementById("scan-lead-form");
       var leadSuccess = document.getElementById("scan-lead-success");
       var leadError = document.getElementById("scan-lead-error");
@@ -426,7 +449,7 @@
       scanUpdateProgress();
     }
 
-    var scanDataKeys = ["sector", "grootte", "ot", "pijnpunt", "aanpak", "urgentie"];
+    var scanDataKeys = ["sector", "grootte", "ot", "pijnpunt", "samenwerking", "urgentie"];
     scanSteps.forEach(function (stepEl, i) {
       var questionEl = stepEl.querySelector(".wizard-question");
       var options = stepEl.querySelectorAll(".wizard-option");
