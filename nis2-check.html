@@ -194,6 +194,31 @@
           <h2 class="text-heading-sm" style="margin-top:14px;" id="nis2-result-title"></h2>
           <p class="carbon" style="margin-top:12px;" id="nis2-result-body"></p>
           <p class="text-body-sm" style="margin-top:20px; color:var(--leisteen);">Dit is een indicatieve inschatting op basis van uw antwoorden, geen juridisch advies. Een definitieve beoordeling gebeurt tijdens de intake.</p>
+
+          <div id="nis2-lead-form" style="margin-top:28px; border-top:1px solid var(--hairline); padding-top:24px;">
+            <h3 class="text-heading-sm" style="margin-bottom:4px;">Wil je dit resultaat en een persoonlijk advies in uw mailbox?</h3>
+            <p class="text-body-sm" style="color:var(--leisteen); margin-bottom:16px;">Optioneel. Laat uw gegevens achter en we nemen dit resultaat mee in een kort, persoonlijk advies.</p>
+            <input type="text" id="nis2-website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="form-row">
+              <div class="field">
+                <label for="nis2-name">Naam</label>
+                <input type="text" id="nis2-name" placeholder="Voor- en achternaam" required>
+              </div>
+              <div class="field">
+                <label for="nis2-email">E-mail</label>
+                <input type="email" id="nis2-email" placeholder="naam@bedrijf.be" required>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="nis2-send">Verstuur mijn resultaat</button>
+            <div class="form-success" id="nis2-lead-success">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>Bedankt. We nemen dit resultaat mee en nemen binnen één werkdag contact op.</span>
+            </div>
+            <div class="form-error" id="nis2-lead-error">
+              <span>Er ging iets mis bij het verzenden. Probeer het opnieuw, of mail ons rechtstreeks op <a href="mailto:info@mainfold.be" style="color:inherit;">info@mainfold.be</a>.</span>
+            </div>
+          </div>
+
           <div class="cta-actions" style="margin-top:28px; justify-content:flex-start;">
             <a href="contact.html#bedrijven" class="btn btn-primary">Plan een NIS2-intake</a>
             <button type="button" class="btn btn-ghost" id="nis2-restart">Opnieuw beginnen</button>

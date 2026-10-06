@@ -203,6 +203,47 @@
     </div>
   </section>
 
+  <!-- LOOPTIJD SLIDER -->
+  <section class="section-pad" style="padding-top:0;">
+    <div class="container">
+      <div class="ls reveal">
+        <div class="hd"><i></i>Welke inzet past?</div>
+        <p class="q">Hoe lang heeft u versterking nodig?</p>
+        <div class="val"><b id="ls-v">6 maanden</b><span id="ls-hint"></span></div>
+        <input type="range" id="ls-r" min="0" max="10" step="1" value="6" aria-label="Looptijd">
+        <div class="scale"><span>1 dag</span><span>3 mnd</span><span>24 mnd</span></div>
+        <div class="tr">
+          <div class="t" data-k="adhoc"><b>Ad-hoc inzet</b><span>Snelle overbrugging bij dringende nood, van 1 dag tot enkele weken.</span></div>
+          <div class="t" data-k="project"><b>Project</b><span>Een specialist of klein team voor een afgebakend resultaat.</span></div>
+          <div class="t" data-k="struct"><b>Structurele plaatsing</b><span>Langdurige versterking van uw team, 6 tot 24 maanden.</span></div>
+        </div>
+        <div class="lead" id="ls-lead-form">
+          <h3>Dit lijkt bij u te passen. Laat uw gegevens achter voor een vrijblijvend gesprek.</h3>
+          <p>We nemen de gekozen looptijd meteen mee in het gesprek.</p>
+          <input type="text" id="ls-website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="form-row">
+            <div class="field">
+              <label for="ls-name">Naam</label>
+              <input type="text" id="ls-name" placeholder="Voor- en achternaam" required>
+            </div>
+            <div class="field">
+              <label for="ls-email">E-mail</label>
+              <input type="email" id="ls-email" placeholder="naam@bedrijf.be" required>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary" id="ls-send">Vraag een gesprek aan</button>
+          <div class="form-success" id="ls-lead-success">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Bedankt. We nemen binnen één werkdag contact op.</span>
+          </div>
+          <div class="form-error" id="ls-lead-error">
+            <span>Er ging iets mis bij het verzenden. Probeer het opnieuw, of mail ons rechtstreeks op <a href="mailto:info@mainfold.be" style="color:#F4F3EF;">info@mainfold.be</a>.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- VERGELIJKING -->
   <section class="section-pad">
     <div class="container">

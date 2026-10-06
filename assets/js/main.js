@@ -5,6 +5,22 @@
 (function () {
   "use strict";
 
+  /* ---------- Shared lead submission helper ----------
+     Every form/quiz on the site (contact forms, the intake wizard,
+     the NIS2-check, the looptijd-slider) posts through this single
+     helper to /send-lead.php, which relays the lead to Resend
+     server-side. Returns a Promise<boolean> (true = sent). */
+  function mfSendLead(payload) {
+    return fetch("send-lead.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(function (res) { return res.json().catch(function () { return { success: false }; }); })
+      .then(function (data) { return !!data.success; })
+      .catch(function () { return false; });
+  }
+
   /* ---------- Header scroll state ---------- */
   var header = document.querySelector(".site-header");
   function onScroll() {
@@ -38,8 +54,10 @@
       function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            entry.target.classList.add("in");
-            io.unobserve(entry.target);
+            var el = entry.target;
+            var delay = +el.getAttribute("data-reveal-delay") || 0;
+            setTimeout(function () { el.classList.add("in"); }, delay);
+            io.unobserve(el);
           }
         });
       },
@@ -180,6 +198,8 @@
     var nis2Index = 0;
     var nis2Score = 0;
     var nis2Readiness = "";
+    var nis2Answers = [];
+    var nis2ResultLabel = "";
     var nis2Steps = Array.prototype.slice.call(nis2Wizard.querySelectorAll(".wizard-step"));
     var nis2ProgressFill = document.getElementById("nis2-progress-fill");
     var nis2StepNum = document.getElementById("nis2-step-num");
@@ -210,6 +230,7 @@
         title = "Op basis van deze antwoorden wellicht niet rechtstreeks.";
         body = "Uw organisatie lijkt op dit moment niet het meest voor de hand liggende profiel voor NIS2. Toch kunnen eisen van klanten of toekomstige groei dit doen veranderen, dus blijf dit opvolgen.";
       }
+      nis2ResultLabel = title;
       if (nis2Readiness === "nog niet gestart") {
         body += " Omdat u nog niet gestart bent, is een gap-analyse een logische eerste stap.";
       } else if (nis2Readiness === "gap-analyse") {
@@ -225,11 +246,19 @@
       nis2Index = 0;
       nis2Score = 0;
       nis2Readiness = "";
+      nis2Answers = [];
+      var leadForm = document.getElementById("nis2-lead-form");
+      var leadSuccess = document.getElementById("nis2-lead-success");
+      var leadError = document.getElementById("nis2-lead-error");
+      if (leadForm) leadForm.style.display = "";
+      if (leadSuccess) leadSuccess.classList.remove("show");
+      if (leadError) leadError.classList.remove("show");
       nis2Show(nis2Order[0]);
       nis2UpdateProgress();
     }
 
     nis2Steps.forEach(function (stepEl) {
+      var questionEl = stepEl.querySelector(".wizard-question");
       var options = stepEl.querySelectorAll(".wizard-option");
       options.forEach(function (btn) {
         btn.addEventListener("click", function () {
@@ -237,6 +266,7 @@
           var readiness = btn.getAttribute("data-readiness");
           if (val !== null) nis2Score += parseInt(val, 10);
           if (readiness !== null) nis2Readiness = readiness;
+          nis2Answers.push([questionEl ? questionEl.textContent.trim() : "Vraag", btn.textContent.trim()]);
           nis2Index++;
           if (nis2Order[nis2Index] === "result") {
             nis2ShowResult();
@@ -250,20 +280,162 @@
     var nis2RestartBtn = document.getElementById("nis2-restart");
     if (nis2RestartBtn) nis2RestartBtn.addEventListener("click", nis2Restart);
 
+    var nis2SendBtn = document.getElementById("nis2-send");
+    if (nis2SendBtn) {
+      nis2SendBtn.addEventListener("click", function () {
+        var nameEl = document.getElementById("nis2-name");
+        var emailEl = document.getElementById("nis2-email");
+        var websiteEl = document.getElementById("nis2-website");
+        var leadError = document.getElementById("nis2-lead-error");
+        var leadSuccess = document.getElementById("nis2-lead-success");
+        var name = nameEl ? nameEl.value.trim() : "";
+        var email = emailEl ? emailEl.value.trim() : "";
+        if (leadError) leadError.classList.remove("show");
+        if (!name || !email) {
+          if (leadError) leadError.classList.add("show");
+          return;
+        }
+        var details = nis2Answers.slice();
+        details.push(["Resultaat", nis2ResultLabel]);
+        nis2SendBtn.disabled = true;
+        mfSendLead({
+          source: "nis2-check",
+          name: name,
+          email: email,
+          website: websiteEl ? websiteEl.value : "",
+          details: details,
+        }).then(function (ok) {
+          nis2SendBtn.disabled = false;
+          if (ok) {
+            var leadFormEl = document.getElementById("nis2-lead-form");
+            if (nameEl) nameEl.closest(".form-row").style.display = "none";
+            if (leadFormEl) {
+              var heading = leadFormEl.querySelector("h3");
+              var sub = leadFormEl.querySelector("p");
+              if (heading) heading.style.display = "none";
+              if (sub) sub.style.display = "none";
+            }
+            nis2SendBtn.style.display = "none";
+            if (leadSuccess) leadSuccess.classList.add("show");
+          } else if (leadError) {
+            leadError.classList.add("show");
+          }
+        });
+      });
+    }
+
     nis2Show(nis2Order[0]);
     nis2UpdateProgress();
   }
 
-  /* ---------- Contact forms (client-side demo) ---------- */
+  /* ---------- Looptijd slider (.ls, diensten.html) ---------- */
+  var lsRange = document.getElementById("ls-r");
+  if (lsRange) {
+    var lsScale = [
+      ["1 dag", "adhoc"], ["1 week", "adhoc"], ["2 weken", "adhoc"],
+      ["1 maand", "project"], ["2 maanden", "project"], ["3 maanden", "project"],
+      ["6 maanden", "struct"], ["9 maanden", "struct"], ["12 maanden", "struct"],
+      ["18 maanden", "struct"], ["24 maanden", "struct"],
+    ];
+    var lsValue = document.getElementById("ls-v");
+    var lsTiles = document.querySelectorAll(".ls .t");
+    var lsCurrentLabel = lsScale[6][0];
+
+    function lsUpdate() {
+      var entry = lsScale[+lsRange.value];
+      lsCurrentLabel = entry[0];
+      if (lsValue) lsValue.textContent = entry[0];
+      lsRange.style.setProperty("--p", (lsRange.value / 10) * 100 + "%");
+      lsTiles.forEach(function (t) {
+        t.classList.toggle("on", t.getAttribute("data-k") === entry[1]);
+      });
+    }
+    lsRange.addEventListener("input", lsUpdate);
+    lsUpdate();
+
+    var lsSendBtn = document.getElementById("ls-send");
+    if (lsSendBtn) {
+      lsSendBtn.addEventListener("click", function () {
+        var nameEl = document.getElementById("ls-name");
+        var emailEl = document.getElementById("ls-email");
+        var websiteEl = document.getElementById("ls-website");
+        var leadError = document.getElementById("ls-lead-error");
+        var leadSuccess = document.getElementById("ls-lead-success");
+        var name = nameEl ? nameEl.value.trim() : "";
+        var email = emailEl ? emailEl.value.trim() : "";
+        if (leadError) leadError.classList.remove("show");
+        if (!name || !email) {
+          if (leadError) leadError.classList.add("show");
+          return;
+        }
+        lsSendBtn.disabled = true;
+        mfSendLead({
+          source: "looptijd-slider",
+          name: name,
+          email: email,
+          website: websiteEl ? websiteEl.value : "",
+          details: [["Gewenste looptijd", lsCurrentLabel]],
+        }).then(function (ok) {
+          lsSendBtn.disabled = false;
+          if (ok) {
+            var leadFormEl = document.getElementById("ls-lead-form");
+            if (leadFormEl) {
+              var heading = leadFormEl.querySelector("h3");
+              var sub = leadFormEl.querySelector("p");
+              var row = leadFormEl.querySelector(".form-row");
+              if (heading) heading.style.display = "none";
+              if (sub) sub.style.display = "none";
+              if (row) row.style.display = "none";
+            }
+            lsSendBtn.style.display = "none";
+            if (leadSuccess) leadSuccess.classList.add("show");
+          } else if (leadError) {
+            leadError.classList.add("show");
+          }
+        });
+      });
+    }
+  }
+
+  /* ---------- Contact forms ---------- */
   document.querySelectorAll(".intake-form").forEach(function (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var success = form.querySelector(".form-success");
-      if (success) {
-        success.classList.add("show");
-        success.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }
-      form.reset();
+      var error = form.querySelector(".form-error");
+      var submitBtn = form.querySelector('button[type="submit"]');
+      if (error) error.classList.remove("show");
+
+      var data = new FormData(form);
+      var payload = {
+        source: form.getAttribute("data-source") || "contact",
+        name: data.get("name") || "",
+        email: data.get("email") || "",
+        company: data.get("company") || "",
+        phone: data.get("phone") || "",
+        message: data.get("message") || "",
+        website: data.get("website") || "",
+        details: [],
+      };
+      ["ervaring", "specialisatie", "beschikbaarheid", "type"].forEach(function (key) {
+        var val = data.get(key);
+        if (val) payload.details.push([key, val]);
+      });
+
+      if (submitBtn) submitBtn.disabled = true;
+      mfSendLead(payload).then(function (ok) {
+        if (submitBtn) submitBtn.disabled = false;
+        if (ok) {
+          if (success) {
+            success.classList.add("show");
+            success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+          form.reset();
+        } else if (error) {
+          error.classList.add("show");
+          error.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      });
     });
   });
 
@@ -387,9 +559,34 @@
           email: document.getElementById("w-email").value.trim(),
           phone: document.getElementById("w-phone").value.trim()
         };
-        wizardBuildSummary();
-        wizardShow("success");
-        wizardNav.style.display = "none";
+        var wizardWebsite = document.getElementById("w-website");
+        var wizardError = document.getElementById("wizard-error");
+        if (wizardError) wizardError.classList.remove("show");
+
+        var details = [];
+        ["1", "2", "3", "4"].forEach(function (k) {
+          if (wizardAnswers[k]) details.push([k, wizardAnswers[k].label]);
+        });
+
+        wizardNext.disabled = true;
+        mfSendLead({
+          source: "contact-bedrijven",
+          name: wizardAnswers.contact.name,
+          company: wizardAnswers.contact.company,
+          email: wizardAnswers.contact.email,
+          phone: wizardAnswers.contact.phone,
+          website: wizardWebsite ? wizardWebsite.value : "",
+          details: details,
+        }).then(function (ok) {
+          wizardNext.disabled = false;
+          if (ok) {
+            wizardBuildSummary();
+            wizardShow("success");
+            wizardNav.style.display = "none";
+          } else if (wizardError) {
+            wizardError.classList.add("show");
+          }
+        });
         return;
       }
       wizardIndex++;
