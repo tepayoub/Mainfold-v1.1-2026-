@@ -947,6 +947,164 @@
     afUpdateProgress();
   }
 
+  /* ---------- Triggermomenten (.tg, index.html) ---------- */
+  var tgWidget = document.querySelector(".tg");
+  if (tgWidget) {
+    var tgRows = Array.prototype.slice.call(tgWidget.querySelectorAll(".row"));
+    var tgT = [];
+    var tgOrig = tgRows.map(function (r) { return r.querySelector("small").textContent; });
+    var tgReduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var tgClock = document.getElementById("tg-clock");
+
+    function tgTick() {
+      var d = new Date();
+      if (tgClock) tgClock.textContent = ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + " · vandaag";
+    }
+    tgTick();
+    setInterval(tgTick, 30000);
+
+    function tgSolve(r) {
+      r.classList.add("focus");
+      tgT.push(setTimeout(function () {
+        r.classList.add("go");
+        r.querySelector("em").textContent = "Mainfold ingezet";
+        r.querySelector("small").textContent = r.getAttribute("data-b");
+      }, 700));
+      tgT.push(setTimeout(function () { r.classList.remove("focus"); }, 1900));
+    }
+
+    function tgReset() {
+      tgRows.forEach(function (r, i) {
+        r.classList.remove("go", "focus");
+        r.querySelector("em").textContent = "open";
+        r.querySelector("small").textContent = tgOrig[i];
+      });
+    }
+
+    if (tgReduce) {
+      tgRows.forEach(function (r) {
+        r.classList.add("go");
+        r.querySelector("em").textContent = "Mainfold ingezet";
+        r.querySelector("small").textContent = r.getAttribute("data-b");
+      });
+    } else {
+      var tgCycle = function () {
+        tgReset();
+        tgRows.forEach(function (r, i) {
+          tgT.push(setTimeout(function () { tgSolve(r); }, 1200 + i * 1900));
+        });
+        tgT.push(setTimeout(tgCycle, 1200 + tgRows.length * 1900 + 3500));
+      };
+      var tgStart = function () {
+        tgT.forEach(clearTimeout);
+        tgT = [];
+        tgCycle();
+      };
+      document.addEventListener("visibilitychange", function () {
+        tgT.forEach(clearTimeout);
+        tgT = [];
+        if (!document.hidden) tgStart();
+      });
+      if ("IntersectionObserver" in window) {
+        var tgIo = new IntersectionObserver(function (es) {
+          if (es[0].isIntersecting) { tgStart(); tgIo.disconnect(); }
+        }, { threshold: 0.3 });
+        tgIo.observe(tgWidget.querySelector(".log"));
+      } else {
+        tgStart();
+      }
+    }
+  }
+
+  /* ---------- IT/OT-lagen (.ot, expertise.html) ---------- */
+  var otWidget = document.getElementById("ot");
+  if (otWidget) {
+    var otZs = otWidget.querySelectorAll(".z");
+    var otPk = document.getElementById("ot-pk");
+    var otSt = document.getElementById("ot-st");
+    var otReduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (otReduce) {
+      otWidget.classList.add("seg");
+      if (otSt) otSt.textContent = "Zones gescheiden";
+    } else {
+      var otT = [];
+      var otAt = function (ms, f) { otT.push(setTimeout(f, ms)); };
+      var otMid = function (z) { return z.offsetTop + z.offsetHeight / 2 - otPk.offsetHeight / 2; };
+      var otCycle = function () {
+        otWidget.classList.remove("seg");
+        otZs.forEach(function (z) { z.classList.remove("on"); });
+        if (otSt) otSt.textContent = "Ongesegmenteerd netwerk";
+        otPk.style.transition = "none";
+        otPk.style.opacity = "1";
+        otPk.style.top = otMid(otZs[0]) + "px";
+        otZs[0].classList.add("on");
+        [1, 2, 3].forEach(function (i) {
+          otAt(700 * i, function () {
+            otPk.style.transition = "top .6s cubic-bezier(.6,0,.3,1)";
+            otPk.style.top = otMid(otZs[i]) + "px";
+            otZs[i].classList.add("on");
+          });
+        });
+        otAt(2900, function () { if (otSt) otSt.textContent = "Risico: kantoor bereikt de PLC"; });
+        otAt(4400, function () {
+          otZs.forEach(function (z) { z.classList.remove("on"); });
+          otPk.style.opacity = "0";
+          otWidget.classList.add("seg");
+          if (otSt) otSt.textContent = "Na segmentatie: zones gescheiden";
+        });
+        otAt(5200, function () {
+          otPk.style.transition = "none";
+          otPk.style.top = otMid(otZs[0]) + "px";
+          otPk.style.opacity = "1";
+          otZs[0].classList.add("on");
+        });
+        otAt(5900, function () {
+          otPk.style.transition = "top .5s cubic-bezier(.6,0,.3,1)";
+          otPk.style.top = (otZs[0].offsetTop + otZs[0].offsetHeight + 2) + "px";
+        });
+        otAt(6500, function () {
+          otPk.style.transition = "opacity .3s";
+          otPk.style.opacity = "0";
+          if (otSt) otSt.textContent = "Verkeer geblokkeerd aan de grens";
+        });
+        otAt(9500, otCycle);
+      };
+      document.addEventListener("visibilitychange", function () {
+        otT.forEach(clearTimeout);
+        otT = [];
+        if (!document.hidden) otCycle();
+      });
+      otCycle();
+    }
+  }
+
+  /* ---------- Blind profiling (.bp, voor-consultants.html) ---------- */
+  var bpWidget = document.getElementById("bp");
+  if (bpWidget) {
+    var bpPill = document.getElementById("bp-pill");
+    var bpSt = bpWidget.querySelectorAll(".steps i");
+    var bpReduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var bpS = [["", "Jouw profiel"], ["anon", "Wat de klant ziet"], ["anon ok", "Klant geïnteresseerd · jij beslist"]];
+    function bpSet(n) {
+      bpWidget.className = "bp " + bpS[n][0];
+      if (bpPill) bpPill.textContent = bpS[n][1];
+      bpSt.forEach(function (x, i) { x.classList.toggle("on", i <= n); });
+    }
+    if (bpReduce) {
+      bpSet(1);
+    } else {
+      var bpN = 0;
+      bpSet(0);
+      var bpTimer = setInterval(function () { bpN = (bpN + 1) % 3; bpSet(bpN); }, 2800);
+      document.addEventListener("visibilitychange", function () {
+        clearInterval(bpTimer);
+        if (!document.hidden) {
+          bpTimer = setInterval(function () { bpN = (bpN + 1) % 3; bpSet(bpN); }, 2800);
+        }
+      });
+    }
+  }
+
   /* ---------- Year in footer ---------- */
   document.querySelectorAll("[data-year]").forEach(function (el) {
     el.textContent = new Date().getFullYear();
