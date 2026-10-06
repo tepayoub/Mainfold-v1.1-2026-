@@ -1518,3 +1518,37 @@ html:not(.js) .af-native-submit { display: block; }
   .of .card { transition: none; }
   .of .hd i { animation: none; }
 }
+
+/* ---------- Homepage logo-intro loader (index.html only) ----------
+   Overlay only ever shows with JS active (progressive enhancement,
+   same convention as the rest of the site); a hard inline timeout in
+   the page itself guarantees it disappears even if main.js fails to
+   load or errors out before reaching the dismiss logic below. */
+html.intro-lock, html.intro-lock body { overflow: hidden; height: 100%; }
+.intro-loader { display: none; }
+html.js .intro-loader {
+  display: flex; align-items: center; justify-content: center;
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--papier);
+  opacity: 1; transition: opacity 0.5s ease;
+}
+.intro-loader.fade { opacity: 0; pointer-events: none; }
+html.js .intro-loader.done { display: none; }
+.intro-loader .li { display: flex; align-items: center; justify-content: center; gap: 24px; }
+.intro-loader .li svg { width: 72px; height: auto; overflow: visible; display: block; }
+.intro-loader .l, .intro-loader .r { transform: translateX(0); transition: transform 1s cubic-bezier(.7,0,.2,1); }
+.intro-loader .li.a .l { transform: translateX(-24px); transition: none; }
+.intro-loader .li.a .r { transform: translateX(24px); transition: none; }
+.intro-loader .k { transform-box: view-box; transform-origin: 32px 24px; transform: scale(0) rotate(-90deg); transition: transform 0.6s cubic-bezier(.3,1.6,.5,1); }
+.intro-loader .li.b .k { transform: scale(1) rotate(0); }
+.intro-loader .wm { font-family: var(--font); font-size: 42px; font-weight: 600; letter-spacing: -0.04em; color: var(--ink); line-height: 1; white-space: nowrap; }
+.intro-loader .wm span { display: inline-block; opacity: 0; transform: translateY(0.25em); transition: opacity 0.35s, transform 0.35s; }
+.intro-loader .li.c .wm span { opacity: 1; transform: none; }
+@media (max-width: 480px) {
+  .intro-loader .li svg { width: 52px; }
+  .intro-loader .wm { font-size: 30px; }
+  .intro-loader .li { gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .intro-loader { display: none; }
+}

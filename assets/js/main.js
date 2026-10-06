@@ -21,6 +21,40 @@
       .catch(function () { return false; });
   }
 
+  /* ---------- Homepage logo-intro loader (index.html only) ----------
+     Placed first in this file so it runs and dismisses even if a
+     later widget below throws; the page itself also carries an inline
+     hard-timeout fallback that doesn't depend on this file at all. */
+  var introLoader = document.getElementById("intro-loader");
+  if (introLoader) {
+    var introLi = document.getElementById("intro-li");
+    var introWm = document.getElementById("intro-wm");
+    "mainfold".split("").forEach(function (ch, i) {
+      var s = document.createElement("span");
+      s.textContent = ch;
+      s.style.transitionDelay = (i * 55) + "ms";
+      s.setAttribute("aria-hidden", "true");
+      introWm.appendChild(s);
+    });
+    var introReduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function introDismiss() {
+      introLoader.classList.add("fade");
+      setTimeout(function () {
+        introLoader.classList.add("done");
+        document.documentElement.classList.remove("intro-lock");
+      }, 500);
+    }
+    if (introReduce) {
+      introDismiss();
+    } else {
+      document.documentElement.classList.add("intro-lock");
+      setTimeout(function () { introLi.classList.remove("a"); }, 60);
+      setTimeout(function () { introLi.classList.add("b"); }, 1000);
+      setTimeout(function () { introLi.classList.add("c"); }, 1400);
+      setTimeout(introDismiss, 2600);
+    }
+  }
+
   /* ---------- Header scroll state ---------- */
   var header = document.querySelector(".site-header");
   function onScroll() {

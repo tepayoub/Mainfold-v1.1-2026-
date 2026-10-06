@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261010">
+<link rel="stylesheet" href="assets/css/style.css?v=20261011">
 <link rel="canonical" href="https://mainfold.be/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mainfold.be/">
@@ -77,6 +77,24 @@
 </script>
 </head>
 <body>
+
+<div class="intro-loader" id="intro-loader" aria-hidden="true">
+  <div class="li a" id="intro-li">
+    <svg viewBox="-4 -4 72 56" aria-hidden="true"><g stroke-linejoin="round" fill="none" stroke="#12161C" stroke-width="3"><polygon class="l" points="24,0 48,24 24,48 0,24"></polygon><polygon class="r" points="40,0 64,24 40,48 16,24"></polygon></g><polygon class="k" points="32,8 48,24 32,40 16,24" fill="#E9A23B"></polygon></svg>
+    <div class="wm" id="intro-wm" aria-label="mainfold"></div>
+  </div>
+</div>
+<script>
+(function () {
+  setTimeout(function () {
+    var el = document.getElementById("intro-loader");
+    if (el && !el.classList.contains("done")) {
+      el.classList.add("fade", "done");
+      document.documentElement.classList.remove("intro-lock");
+    }
+  }, 3500);
+})();
+</script>
 
 <div class="top-banner">
   <div class="container">
@@ -423,6 +441,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=20261010"></script>
+<script src="assets/js/main.js?v=20261011"></script>
 </body>
 </html>
