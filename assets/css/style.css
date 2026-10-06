@@ -725,6 +725,31 @@ section { position: relative; }
   flex-wrap: wrap;
   gap: 12px;
 }
+.footer-share {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.footer-share .text-caption {
+  color: rgba(255,255,255,0.45);
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+.footer-share a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.footer-share a:hover { border-color: var(--signaal); color: var(--signaal); }
+.footer-share a svg { width: 15px; height: 15px; }
 
 /* ---------- Page header (inner pages) ---------- */
 .page-header {
