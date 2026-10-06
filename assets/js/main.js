@@ -335,10 +335,13 @@
      resultaat per combinatie van antwoorden anders aanvoelt. */
   var scanWizard = document.getElementById("scan-wizard");
   if (scanWizard) {
-    var scanOrder = ["1", "2", "3", "4", "5", "6", "result"];
+    var scanOrder = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "result"];
     var scanIndex = 0;
     var scanAnswers = [];
-    var scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", samenwerking: "", urgentie: "" };
+    var scanData = {
+      sector: "", grootte: "", ot: "", rol: "", team: "", pijnpunt: "",
+      compliance: "", extern: "", budget: "", samenwerking: "", urgentie: "", bron: "",
+    };
     var scanResultLabel = "";
     var scanSteps = Array.prototype.slice.call(scanWizard.querySelectorAll(".wizard-step"));
     var scanProgressFill = document.getElementById("scan-progress-fill");
@@ -399,6 +402,18 @@
       binnenkort: " Met enkele maanden speelruimte is er nog tijd om dit gestructureerd aan te pakken in plaats van te improviseren.",
       orienterend: " Zonder directe druk is dit het moment om rustig te verkennen wat wel en niet nodig is, zonder verkoopdruk.",
     };
+    var scanComplianceModifiers = {
+      "nog-niet-gestart": " Omdat u nog niet gestart bent met uw compliance-traject, is een gap-analyse een logische eerste stap.",
+      "gap-analyse": " U bent al bezig met een gap-analyse, wat het gesprek meteen concreter maakt.",
+      "grotendeels-klaar": " U staat al ver met compliance; een externe toetsing kan de puzzel vervolledigen.",
+      "niet-van-toepassing": "",
+    };
+    var scanBudgetModifiers = {
+      goedgekeurd: " Met budget al goedgekeurd, kan een intake meteen concreet worden.",
+      "in-behandeling": " Met budget in behandeling is dit het juiste moment om de scope alvast scherp te zetten.",
+      "nog-geen": " Zonder budget nog vastgelegd, beginnen we liever met een verkennend, vrijblijvend gesprek.",
+      onbekend: "",
+    };
 
     function scanShow(stepKey) {
       scanSteps.forEach(function (el) {
@@ -407,15 +422,18 @@
     }
 
     function scanUpdateProgress() {
-      var pct = Math.min(((scanIndex + 1) / 6) * 100, 100);
+      var total = scanOrder.length - 1;
+      var pct = Math.min(((scanIndex + 1) / total) * 100, 100);
       if (scanProgressFill) scanProgressFill.style.width = pct + "%";
-      if (scanStepNum) scanStepNum.textContent = Math.min(scanIndex + 1, 6);
+      if (scanStepNum) scanStepNum.textContent = Math.min(scanIndex + 1, total);
     }
 
     function scanShowResult() {
       var p = scanPainpoints[scanData.pijnpunt] || scanPainpoints.onduidelijk;
       var title = p.title;
       var body = p.body;
+      body += scanComplianceModifiers[scanData.compliance] || "";
+      body += scanBudgetModifiers[scanData.budget] || "";
       body += scanUrgentieModifiers[scanData.urgentie] || "";
       var sectorLabel = scanSectorLabels[scanData.sector] || "uw sector";
       if (scanData.ot === "ot" || scanData.ot === "it-ot") {
@@ -438,7 +456,10 @@
     function scanRestart() {
       scanIndex = 0;
       scanAnswers = [];
-      scanData = { sector: "", grootte: "", ot: "", pijnpunt: "", samenwerking: "", urgentie: "" };
+      scanData = {
+        sector: "", grootte: "", ot: "", rol: "", team: "", pijnpunt: "",
+        compliance: "", extern: "", budget: "", samenwerking: "", urgentie: "", bron: "",
+      };
       var leadForm = document.getElementById("scan-lead-form");
       var leadSuccess = document.getElementById("scan-lead-success");
       var leadError = document.getElementById("scan-lead-error");
@@ -449,7 +470,10 @@
       scanUpdateProgress();
     }
 
-    var scanDataKeys = ["sector", "grootte", "ot", "pijnpunt", "samenwerking", "urgentie"];
+    var scanDataKeys = [
+      "sector", "grootte", "ot", "rol", "team", "pijnpunt",
+      "compliance", "extern", "budget", "samenwerking", "urgentie", "bron",
+    ];
     scanSteps.forEach(function (stepEl, i) {
       var questionEl = stepEl.querySelector(".wizard-question");
       var options = stepEl.querySelectorAll(".wizard-option");

@@ -65,8 +65,15 @@ $message = isset($data['message']) ? trim((string) $data['message']) : '';
 $details = [];
 if (isset($data['details']) && is_array($data['details'])) {
     foreach ($data['details'] as $row) {
-        if (is_array($row) && isset($row['label'], $row['value'])) {
+        if (!is_array($row)) {
+            continue;
+        }
+        if (isset($row['label'], $row['value'])) {
             $details[] = [(string) $row['label'], (string) $row['value']];
+        } elseif (isset($row[0], $row[1])) {
+            // JS pusht vraag/antwoord-paren als [vraag, antwoord], niet als
+            // {label, value}; JSON-decodeert naar een numeriek PHP-array.
+            $details[] = [(string) $row[0], (string) $row[1]];
         }
     }
 }

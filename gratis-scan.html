@@ -5,7 +5,7 @@
 <script>document.documentElement.classList.add("js");</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gratis expertise-scan · Mainfold</title>
-<meta name="description" content="Zes korte vragen over sector, team en prioriteiten geven een persoonlijk beeld van waar uw organisatie vandaag staat op vlak van IT/OT-security, en wat een logische volgende stap is.">
+<meta name="description" content="Een uitgebreide doorlichting van sector, team, budget en prioriteiten geeft een persoonlijk beeld van waar uw organisatie vandaag staat op vlak van IT/OT-security, en wat een logische volgende stap is.">
 <link rel="icon" type="image/png" href="assets/img/favicon.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,14 +17,14 @@
 <meta property="og:url" content="https://mainfold.be/gratis-scan.html">
 <meta property="og:site_name" content="Mainfold">
 <meta property="og:title" content="Gratis expertise-scan · Mainfold">
-<meta property="og:description" content="Zes korte vragen over sector, team en prioriteiten geven een persoonlijk beeld van waar uw organisatie vandaag staat op vlak van IT/OT-security, en wat een logische volgende stap is.">
+<meta property="og:description" content="Een uitgebreide doorlichting van sector, team, budget en prioriteiten geeft een persoonlijk beeld van waar uw organisatie vandaag staat op vlak van IT/OT-security, en wat een logische volgende stap is.">
 <meta property="og:image" content="https://mainfold.be/assets/img/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="nl_BE">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Gratis expertise-scan · Mainfold">
-<meta name="twitter:description" content="Zes korte vragen over sector, team en prioriteiten geven een persoonlijk beeld van waar uw organisatie vandaag staat op vlak van IT/OT-security, en wat een logische volgende stap is.">
+<meta name="twitter:description" content="Een uitgebreide doorlichting van sector, team, budget en prioriteiten geeft een persoonlijk beeld van waar uw organisatie vandaag staat op vlak van IT/OT-security, en wat een logische volgende stap is.">
 <meta name="twitter:image" content="https://mainfold.be/assets/img/og-image.png">
 <script type="application/ld+json">
 {
@@ -123,7 +123,7 @@
       <div class="breadcrumb"><a href="index.html">Home</a> / Gratis expertise-scan</div>
       <span class="eyebrow">GRATIS EXPERTISE-SCAN</span>
       <h1 class="text-display">Waar staat uw organisatie vandaag?</h1>
-      <p class="lede text-body-lg carbon">Zes korte vragen over sector, team en prioriteiten geven een persoonlijk beeld, geen verkoopgesprek. Helemaal gratis, zonder verplichting.</p>
+      <p class="lede text-body-lg carbon">Een uitgebreide, persoonlijke doorlichting van sector, team, budget en prioriteiten, geen verkoopgesprek. Helemaal gratis, zonder verplichting.</p>
     </div>
   </section>
 
@@ -133,9 +133,9 @@
       <div class="form-card" id="scan-wizard">
 
         <div class="wizard-nav" style="margin-bottom:28px; order:initial;">
-          <span class="text-caption" style="color:var(--leisteen); font-family:var(--font-mono);">VRAAG <span id="scan-step-num">1</span> VAN 6</span>
+          <span class="text-caption" style="color:var(--leisteen); font-family:var(--font-mono);">VRAAG <span id="scan-step-num">1</span> VAN 12</span>
           <div class="wizard-progress" style="flex:1; margin:0 16px; height:3px; background:var(--hairline); position:relative; overflow:hidden;">
-            <div id="scan-progress-fill" style="position:absolute; left:0; top:0; bottom:0; width:16.66%; background:var(--signaal); transition:width 0.3s ease;"></div>
+            <div id="scan-progress-fill" style="position:absolute; left:0; top:0; bottom:0; width:8.33%; background:var(--signaal); transition:width 0.3s ease;"></div>
           </div>
         </div>
 
@@ -172,8 +172,30 @@
           </div>
         </div>
 
-        <!-- Step 4: pijnpunt -->
+        <!-- Step 4: rol -->
         <div class="wizard-step" data-scan-step="4">
+          <h2 class="text-heading-sm wizard-question">Wat is uw rol in de organisatie?</h2>
+          <div class="wizard-options single-col">
+            <button type="button" class="wizard-option" data-rol="it-manager">IT- of securitymanager</button>
+            <button type="button" class="wizard-option" data-rol="ciso">CISO of hoofd security</button>
+            <button type="button" class="wizard-option" data-rol="directie">Directie of C-level</button>
+            <button type="button" class="wizard-option" data-rol="ondersteunend">HR, inkoop of een andere ondersteunende rol</button>
+          </div>
+        </div>
+
+        <!-- Step 5: team -->
+        <div class="wizard-step" data-scan-step="5">
+          <h2 class="text-heading-sm wizard-question">Hoe groot is uw interne securityteam vandaag?</h2>
+          <div class="wizard-options single-col">
+            <button type="button" class="wizard-option" data-team="geen">Geen dedicated securitypersoon</button>
+            <button type="button" class="wizard-option" data-team="klein">1 tot 2 personen</button>
+            <button type="button" class="wizard-option" data-team="middel">3 tot 10 personen</button>
+            <button type="button" class="wizard-option" data-team="groot">Meer dan 10 personen</button>
+          </div>
+        </div>
+
+        <!-- Step 6: pijnpunt -->
+        <div class="wizard-step" data-scan-step="6">
           <h2 class="text-heading-sm wizard-question">Wat speelt er nu het meest?</h2>
           <div class="wizard-options single-col">
             <button type="button" class="wizard-option" data-pijnpunt="capaciteit">Tekort aan securitycapaciteit in het team</button>
@@ -184,8 +206,40 @@
           </div>
         </div>
 
-        <!-- Step 5: samenwerking -->
-        <div class="wizard-step" data-scan-step="5">
+        <!-- Step 7: compliance -->
+        <div class="wizard-step" data-scan-step="7">
+          <h2 class="text-heading-sm wizard-question">Hoe ver staat u met compliance-verplichtingen (NIS2, DORA, ISO 27001, …)?</h2>
+          <div class="wizard-options single-col">
+            <button type="button" class="wizard-option" data-compliance="nog-niet-gestart">Nog niet gestart</button>
+            <button type="button" class="wizard-option" data-compliance="gap-analyse">Bezig met een gap-analyse</button>
+            <button type="button" class="wizard-option" data-compliance="grotendeels-klaar">Grotendeels klaar</button>
+            <button type="button" class="wizard-option" data-compliance="niet-van-toepassing">Niet van toepassing op ons</button>
+          </div>
+        </div>
+
+        <!-- Step 8: extern -->
+        <div class="wizard-step" data-scan-step="8">
+          <h2 class="text-heading-sm wizard-question">Werkt u hiervoor al samen met een externe partner?</h2>
+          <div class="wizard-options single-col">
+            <button type="button" class="wizard-option" data-extern="nieuw">Nee, dit zou de eerste keer zijn</button>
+            <button type="button" class="wizard-option" data-extern="alternatief">Ja, maar we zoeken een alternatief</button>
+            <button type="button" class="wizard-option" data-extern="aanvullend">Ja, en dat loopt goed, we zoeken aanvullende expertise</button>
+          </div>
+        </div>
+
+        <!-- Step 9: budget -->
+        <div class="wizard-step" data-scan-step="9">
+          <h2 class="text-heading-sm wizard-question">Is er al budget vrijgemaakt voor dit traject?</h2>
+          <div class="wizard-options single-col">
+            <button type="button" class="wizard-option" data-budget="goedgekeurd">Ja, budget is goedgekeurd</button>
+            <button type="button" class="wizard-option" data-budget="in-behandeling">Budget wordt momenteel bekeken</button>
+            <button type="button" class="wizard-option" data-budget="nog-geen">Nog geen budget, we verkennen eerst</button>
+            <button type="button" class="wizard-option" data-budget="onbekend">Weet ik niet, dat is niet mijn rol</button>
+          </div>
+        </div>
+
+        <!-- Step 10: samenwerking -->
+        <div class="wizard-step" data-scan-step="10">
           <h2 class="text-heading-sm wizard-question">Welk type samenwerking past het best?</h2>
           <div class="wizard-options single-col">
             <button type="button" class="wizard-option" data-samenwerking="adhoc">Ad-hoc inzet, snel voor een dringende nood</button>
@@ -195,13 +249,25 @@
           </div>
         </div>
 
-        <!-- Step 6: urgentie -->
-        <div class="wizard-step" data-scan-step="6">
+        <!-- Step 11: urgentie -->
+        <div class="wizard-step" data-scan-step="11">
           <h2 class="text-heading-sm wizard-question">Hoe dringend is dit voor u?</h2>
           <div class="wizard-options single-col">
             <button type="button" class="wizard-option" data-urgentie="dringend">Nu dringend</button>
             <button type="button" class="wizard-option" data-urgentie="binnenkort">Binnen enkele maanden</button>
             <button type="button" class="wizard-option" data-urgentie="orienterend">Oriënterend, geen directe druk</button>
+          </div>
+        </div>
+
+        <!-- Step 12: bron -->
+        <div class="wizard-step" data-scan-step="12">
+          <h2 class="text-heading-sm wizard-question">Hoe hoorde u van Mainfold?</h2>
+          <div class="wizard-options single-col">
+            <button type="button" class="wizard-option" data-bron="linkedin">LinkedIn</button>
+            <button type="button" class="wizard-option" data-bron="instagram">Instagram</button>
+            <button type="button" class="wizard-option" data-bron="via-via">Via via, mond-tot-mond</button>
+            <button type="button" class="wizard-option" data-bron="zoekmachine">Google of een andere zoekmachine</button>
+            <button type="button" class="wizard-option" data-bron="anders">Anders</button>
           </div>
         </div>
 
