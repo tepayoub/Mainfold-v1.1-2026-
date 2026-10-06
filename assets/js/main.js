@@ -1105,6 +1105,103 @@
     }
   }
 
+  /* ---------- Profielkiezer (.pk, voor-bedrijven.html) ---------- */
+  var pkOpts = document.getElementById("pk-opts");
+  if (pkOpts) {
+    var pkCard = document.getElementById("pk-card");
+    var pkCur;
+    var pkP = {
+      "OT-security": { code: "MF-OT-042", r: [["Niveau", "Senior · 9 jaar"], ["Expertise", "SCADA, PLC, segmentatie"], ["Kader", "IEC 62443"], ["Sector", "Industrie, energie"]] },
+      "Cloud": { code: "MF-CL-017", r: [["Niveau", "Senior · 8 jaar"], ["Expertise", "Azure, landing zones"], ["Kader", "ISO 27001"], ["Sector", "Financiële instellingen"]] },
+      "SOC": { code: "MF-SC-008", r: [["Niveau", "Medior · 6 jaar"], ["Expertise", "SIEM, incident response"], ["Kader", "MITRE ATT&CK"], ["Sector", "Energie en nuts"]] },
+      "Pentest": { code: "MF-PT-031", r: [["Niveau", "Senior · 10 jaar"], ["Expertise", "Web, infra, red team"], ["Kader", "OWASP, OSCP"], ["Sector", "Overheid"]] },
+      "GRC": { code: "MF-GR-023", r: [["Niveau", "Senior · 11 jaar"], ["Expertise", "Risicobeheer, audits"], ["Kader", "ISO 27001"], ["Sector", "Zorg, overheid"]] },
+      "Architectuur": { code: "MF-AR-011", r: [["Niveau", "Senior · 14 jaar"], ["Expertise", "Netwerk, zero trust"], ["Kader", "IEC 62443"], ["Sector", "Industrie"]] },
+    };
+    var pkCodeEl = document.getElementById("pk-code");
+    var pkRowsEl = document.getElementById("pk-rows");
+
+    function pkShow(k, anim) {
+      var p = pkP[k];
+      pkCur = k;
+      Array.prototype.forEach.call(pkOpts.children, function (b) {
+        b.setAttribute("aria-pressed", b.textContent === k);
+      });
+      function put() {
+        pkCodeEl.textContent = p.code;
+        pkRowsEl.innerHTML = p.r.map(function (x) {
+          return "<div><span>" + x[0] + "</span><span>" + x[1].replace(/&/g, "&amp;") + "</span></div>";
+        }).join("");
+        pkCard.classList.remove("swap");
+      }
+      if (anim) {
+        pkCard.classList.add("swap");
+        setTimeout(put, 250);
+      } else {
+        put();
+      }
+    }
+
+    Object.keys(pkP).forEach(function (k) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = k;
+      b.addEventListener("click", function () { if (k !== pkCur) pkShow(k, true); });
+      pkOpts.appendChild(b);
+    });
+    pkShow("OT-security", false);
+  }
+
+  /* ---------- Opdrachtenfeed (.of, voor-consultants.html) ---------- */
+  var ofList = document.getElementById("of-list");
+  if (ofList) {
+    var ofD = [
+      ["OT Security Engineer", "12 mnd", "Industrie · Antwerpen · hybride"],
+      ["Cloud Engineer", "9 mnd", "Financieel · Brussel · Azure"],
+      ["SOC Analyst", "18 mnd", "Energie · Gent · 24/7 team"],
+      ["GRC Consultant", "6 mnd", "Zorg · Hasselt · ISO 27001"],
+      ["Penetration Tester", "3 weken", "Overheid · Leuven · ad-hoc"],
+      ["Solution Architect", "12 mnd", "Logistiek · Mechelen · zero trust"],
+      ["CISO Consultant", "24 mnd", "Industrie · Kortrijk · 3 dagen/week"],
+      ["Network Engineer", "10 mnd", "Nuts · Brugge · OT-segmentatie"],
+    ];
+    var ofI = 0;
+    var ofMax = 4;
+    var ofReduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function ofCard(d) {
+      var c = document.createElement("div");
+      c.className = "card new";
+      c.innerHTML = '<div class="r1"><b></b><span class="tag"></span></div><div class="r2"></div>';
+      c.querySelector("b").textContent = d[0];
+      c.querySelector(".tag").textContent = d[1];
+      c.querySelector(".r2").textContent = d[2];
+      return c;
+    }
+
+    function ofAdd() {
+      var c = ofCard(ofD[ofI % ofD.length]);
+      ofI++;
+      Array.prototype.forEach.call(ofList.children, function (x) { x.classList.add("old"); });
+      ofList.appendChild(c);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { c.classList.remove("new"); });
+      });
+      while (ofList.children.length > ofMax) ofList.removeChild(ofList.firstChild);
+    }
+
+    for (var ofK = 0; ofK < ofMax; ofK++) { ofAdd(); }
+    Array.prototype.forEach.call(ofList.children, function (x) { x.classList.remove("new"); });
+
+    if (!ofReduce) {
+      var ofTimer = setInterval(ofAdd, 2600);
+      document.addEventListener("visibilitychange", function () {
+        clearInterval(ofTimer);
+        if (!document.hidden) ofTimer = setInterval(ofAdd, 2600);
+      });
+    }
+  }
+
   /* ---------- Year in footer ---------- */
   document.querySelectorAll("[data-year]").forEach(function (el) {
     el.textContent = new Date().getFullYear();
