@@ -607,6 +607,128 @@
     wizardCheckEnabled();
   }
 
+  /* ---------- Consultant-aanmeldformulier (multi-step, met cv-upload) ----------
+     Gebruikt op contact.html (consultants-paneel) en aanmelden-consultants.html.
+     Verstuurt als multipart/form-data (nodig voor de optionele cv-bijlage),
+     rechtstreeks naar send-lead.php. */
+  var afForm = document.querySelector(".af-wizard");
+  if (afForm) {
+    var afSteps = Array.prototype.slice.call(afForm.querySelectorAll(".wizard-step"));
+    var afOrder = ["1", "2", "3"];
+    var afIndex = 0;
+    var afStepNames = { "1": "Over jou", "2": "Je expertise", "3": "Beschikbaarheid" };
+    var afPrev = document.getElementById("af-prev");
+    var afNext = document.getElementById("af-next");
+    var afNav = document.getElementById("af-nav");
+    var afProgressFill = document.getElementById("af-progress-fill");
+    var afStepNum = document.getElementById("af-step-num");
+    var afStepName = document.getElementById("af-step-name");
+
+    function afShow(stepKey) {
+      afSteps.forEach(function (el) {
+        el.classList.toggle("active", el.getAttribute("data-step") === stepKey);
+      });
+    }
+
+    function afUpdateProgress() {
+      afProgressFill.style.width = ((afIndex + 1) / afOrder.length) * 100 + "%";
+      afStepNum.textContent = afIndex + 1;
+      afStepName.textContent = afStepNames[afOrder[afIndex]];
+      afPrev.style.visibility = afIndex === 0 ? "hidden" : "visible";
+      afNext.textContent = afIndex === afOrder.length - 1 ? "Verstuur aanmelding" : "Volgende";
+    }
+
+    function afValidateStep(stepKey) {
+      var stepEl = afForm.querySelector('.wizard-step[data-step="' + stepKey + '"]');
+      var ok = true;
+      stepEl.querySelectorAll("[required]").forEach(function (el) {
+        var good = el.type === "checkbox" ? el.checked : el.checkValidity() && el.value.trim() !== "";
+        var wrap = el.closest(".field") || el.closest(".af-check");
+        if (wrap) wrap.classList.toggle("af-field-bad", !good);
+        if (!good) ok = false;
+      });
+      var msg = "";
+      if (stepKey === "2" && !stepEl.querySelector('[name="profiel[]"]:checked')) {
+        ok = false;
+        msg = "Kies minstens één profiel.";
+      }
+      if (!ok && !msg) {
+        var consent = stepEl.querySelector('[name="toestemming"]');
+        msg = stepKey === "3" && consent && !consent.checked
+          ? "Vink de toestemming aan om te versturen."
+          : "Vul de gemarkeerde velden correct in.";
+      }
+      var msgEl = document.getElementById("af-msg-" + stepKey);
+      if (msgEl) msgEl.textContent = msg;
+      return ok;
+    }
+
+    function afSendLead(form) {
+      return fetch(form.getAttribute("action") || "send-lead.php", {
+        method: "POST",
+        body: new FormData(form),
+      })
+        .then(function (res) { return res.json().catch(function () { return { success: false }; }); })
+        .then(function (data) { return !!data.success; })
+        .catch(function () { return false; });
+    }
+
+    afNext.addEventListener("click", function () {
+      var stepKey = afOrder[afIndex];
+      if (!afValidateStep(stepKey)) return;
+      if (afIndex < afOrder.length - 1) {
+        afIndex++;
+        afShow(afOrder[afIndex]);
+        afUpdateProgress();
+        return;
+      }
+      afNext.disabled = true;
+      afNext.textContent = "Versturen…";
+      afSendLead(afForm).then(function (ok) {
+        if (ok) {
+          afShow("success");
+          if (afNav) afNav.style.display = "none";
+        } else {
+          afNext.disabled = false;
+          afNext.textContent = "Verstuur aanmelding";
+          var msgEl = document.getElementById("af-msg-3");
+          if (msgEl) msgEl.textContent = "Versturen lukte niet. Probeer opnieuw of mail naar info@mainfold.be.";
+        }
+      });
+    });
+
+    afPrev.addEventListener("click", function () {
+      if (afIndex === 0) return;
+      afIndex--;
+      afShow(afOrder[afIndex]);
+      afUpdateProgress();
+    });
+
+    var afCv = document.getElementById("af-cv");
+    if (afCv) {
+      afCv.addEventListener("change", function (e) {
+        var file = e.target.files[0];
+        var nameEl = document.getElementById("af-cv-name");
+        if (!file || !nameEl) return;
+        if (file.size > 10 * 1024 * 1024) {
+          e.target.value = "";
+          nameEl.textContent = "Bestand te groot (max. 10 MB)";
+          return;
+        }
+        nameEl.textContent = file.name;
+      });
+    }
+
+    // Met JS verloopt versturen via de "Volgende"/"Verstuur aanmelding"-knop
+    // hierboven; dit vangt enkel de no-JS fallback-submitknop af zodat die
+    // niet dubbel verstuurt wanneer JS toch actief is.
+    afForm.addEventListener("submit", function (e) {
+      if (document.documentElement.classList.contains("js")) e.preventDefault();
+    });
+
+    afUpdateProgress();
+  }
+
   /* ---------- Year in footer ---------- */
   document.querySelectorAll("[data-year]").forEach(function (el) {
     el.textContent = new Date().getFullYear();

@@ -82,9 +82,54 @@ function mf_esc(string $s): string
     return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 }
 
+// Formulierspecifieke velden van het consultant-aanmeldformulier (multi-step,
+// contact.html en aanmelden-consultants.html). Dit formulier verstuurt als
+// multipart/form-data (voor de optionele cv-bijlage), dus deze velden komen
+// via $_POST binnen in plaats van via de generieke JSON 'details'-lijst.
+$extraFieldLabels = [
+    'linkedin' => 'LinkedIn',
+    'ervaring' => 'Jaren ervaring',
+    'statuut' => 'Statuut',
+    'certificeringen' => 'Certificeringen',
+    'regio' => 'Regio',
+    'beschikbaar' => 'Beschikbaar vanaf',
+    'looptijd' => 'Voorkeur looptijd',
+    'werkwijze' => 'Werkwijze',
+];
+if (isset($data['profiel'])) {
+    $profiel = is_array($data['profiel']) ? $data['profiel'] : [$data['profiel']];
+    $profiel = array_filter(array_map('strval', $profiel));
+    if ($profiel) {
+        $details[] = ['Profiel', implode(', ', $profiel)];
+    }
+}
+foreach ($extraFieldLabels as $key => $label) {
+    if (isset($data[$key]) && trim((string) $data[$key]) !== '') {
+        $details[] = [$label, trim((string) $data[$key])];
+    }
+}
+
+// Optionele cv-bijlage (pdf/doc/docx, max. 10 MB), als base64-attachment
+// meegestuurd met de Resend-mail.
+$attachments = [];
+if (!empty($_FILES['cv']['name']) && is_uploaded_file($_FILES['cv']['tmp_name'])) {
+    $cv = $_FILES['cv'];
+    $ext = strtolower((string) pathinfo((string) $cv['name'], PATHINFO_EXTENSION));
+    if ($cv['error'] === UPLOAD_ERR_OK && $cv['size'] <= 10 * 1024 * 1024 && in_array($ext, ['pdf', 'doc', 'docx'], true)) {
+        $cvContent = file_get_contents($cv['tmp_name']);
+        if ($cvContent !== false) {
+            $attachments[] = [
+                'filename' => basename((string) $cv['name']),
+                'content' => base64_encode($cvContent),
+            ];
+        }
+    }
+}
+
 $subjectMap = [
     'contact-bedrijven' => 'Nieuwe aanvraag (bedrijf)',
-    'contact-consultants' => 'Nieuwe aanvraag (consultant)',
+    'contact-consultants' => 'Nieuwe consultant-aanmelding',
+    'aanmelden-consultants' => 'Nieuwe consultant-aanmelding',
     'nis2-check' => 'Nieuwe NIS2-check inzending',
     'looptijd-slider' => 'Nieuwe looptijd-check inzending',
 ];
@@ -111,13 +156,17 @@ $html = '<div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color
     . '<table cellpadding="0" cellspacing="0">' . $bodyRows . '</table>'
     . '</div>';
 
-$payload = json_encode([
+$emailPayload = [
     'from' => $fromAddress,
     'to' => [$toAddress],
     'reply_to' => $email,
     'subject' => $subject,
     'html' => $html,
-]);
+];
+if ($attachments) {
+    $emailPayload['attachments'] = $attachments;
+}
+$payload = json_encode($emailPayload);
 
 $ch = curl_init('https://api.resend.com/emails');
 curl_setopt_array($ch, [

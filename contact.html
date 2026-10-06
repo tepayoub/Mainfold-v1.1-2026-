@@ -140,61 +140,130 @@
         <div class="grid-2 reveal" style="align-items:flex-start; gap:40px;">
 
           <div class="form-card">
-            <h2 class="text-heading-sm" style="margin-bottom:24px;">Meld je aan als consultant</h2>
-            <form id="contact-form-consultants" class="intake-form" data-source="contact-consultants">
+            <h2 class="text-heading-sm" style="margin-bottom:8px;">Meld je aan als consultant</h2>
+            <p class="carbon text-body-sm" style="margin-bottom:24px;">Twee minuten. Je gegevens blijven bij ons: klanten zien enkel een anoniem profiel.</p>
+            <form id="contact-form-af" class="af-wizard" data-source="contact-consultants" action="send-lead.php" method="POST" enctype="multipart/form-data" novalidate>
               <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
-              <div class="form-row">
-                <div class="field">
-                  <label for="c-name">Naam</label>
-                  <input type="text" id="c-name" name="name" placeholder="Voor- en achternaam" required>
-                </div>
-                <div class="field">
-                  <label for="c-email">E-mail</label>
-                  <input type="email" id="c-email" name="email" placeholder="naam@voorbeeld.be" required>
-                </div>
+
+              <div class="wizard-progress">
+                <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="af-progress-fill" style="width:33.33%"></div></div>
+                <span class="wizard-step-label">Stap <span id="af-step-num">1</span> van 3 &middot; <span id="af-step-name">Over jou</span></span>
               </div>
-              <div class="form-row">
-                <div class="field">
-                  <label for="c-phone">Telefoon</label>
-                  <input type="tel" id="c-phone" name="phone" placeholder="+32 …">
+
+              <div class="wizard-step active" data-step="1">
+                <div class="form-row">
+                  <div class="field"><label for="af-name">Naam</label><input type="text" id="af-name" name="name" placeholder="Voor- en achternaam" autocomplete="name" required></div>
+                  <div class="field"><label for="af-email">E-mail</label><input type="email" id="af-email" name="email" placeholder="naam@voorbeeld.be" autocomplete="email" required></div>
                 </div>
-                <div class="field">
-                  <label for="c-ervaring">Jaren ervaring</label>
-                  <select id="c-ervaring" name="ervaring">
-                    <option>5 tot 8 jaar</option>
-                    <option>9 tot 15 jaar</option>
-                    <option>15 jaar of meer</option>
-                  </select>
+                <div class="form-row">
+                  <div class="field"><label for="af-phone">Telefoon</label><input type="tel" id="af-phone" name="phone" placeholder="+32 4.." autocomplete="tel" required></div>
+                  <div class="field"><label for="af-linkedin">LinkedIn <small>optioneel</small></label><input type="url" id="af-linkedin" name="linkedin" placeholder="https://linkedin.com/in/..."></div>
                 </div>
+                <div class="af-msg" id="af-msg-1"></div>
               </div>
-              <div class="form-row">
+
+              <div class="wizard-step" data-step="2">
                 <div class="field">
-                  <label for="c-specialisatie">Specialisatie</label>
-                  <select id="c-specialisatie" name="specialisatie">
-                    <option>IT/OT-cybersecurity</option>
-                    <option>OT / SCADA / ICS</option>
-                    <option>Cloud &amp; infra</option>
-                    <option>Iets anders</option>
-                  </select>
+                  <label>Profiel <small>kies er &eacute;&eacute;n of meer</small></label>
+                  <div class="af-chips">
+                    <label><input type="checkbox" name="profiel[]" value="OT Security Engineer"><span>OT Security</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="SOC Analyst"><span>SOC</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="GRC / NIS2 Consultant"><span>GRC / NIS2</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="Penetration Tester"><span>Pentest</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="CISO Consultant"><span>CISO</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="Cloud Engineer"><span>Cloud</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="DevOps Engineer"><span>DevOps</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="Infrastructure / Network / System Engineer"><span>Infra / Netwerk</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="Solution / IT Architect"><span>Architect</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="IT Project Manager"><span>Project Manager</span></label>
+                    <label><input type="checkbox" name="profiel[]" value="Business / Functional Analyst"><span>Analist</span></label>
+                  </div>
                 </div>
-                <div class="field">
-                  <label for="c-beschikbaarheid">Beschikbaarheid</label>
-                  <input type="text" id="c-beschikbaarheid" name="beschikbaarheid" placeholder="Bv. onmiddellijk, of vanaf een datum">
+                <div class="form-row" style="margin-top:16px;">
+                  <div class="field">
+                    <label for="af-ervaring">Jaren ervaring</label>
+                    <select id="af-ervaring" name="ervaring" required>
+                      <option value="">Kies</option>
+                      <option>Minder dan 5 jaar</option>
+                      <option>5 tot 7 jaar</option>
+                      <option>8 tot 10 jaar</option>
+                      <option>11 tot 15 jaar</option>
+                      <option>15 jaar of meer</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="af-statuut">Statuut</label>
+                    <select id="af-statuut" name="statuut" required>
+                      <option value="">Kies</option>
+                      <option>Zelfstandige (eenmanszaak)</option>
+                      <option>Eigen vennootschap</option>
+                      <option>Nog in loondienst, wil starten als zelfstandige</option>
+                    </select>
+                  </div>
                 </div>
+                <div class="field"><label for="af-cert">Certificeringen <small>optioneel</small></label><input type="text" id="af-cert" name="certificeringen" placeholder="Bv. GICSP, CISSP, ISO 27001 LI, AZ-104"></div>
+                <div class="af-msg" id="af-msg-2"></div>
               </div>
-              <div class="field">
-                <label for="c-message">Motivatie</label>
-                <textarea id="c-message" name="message" placeholder="Vertel ons kort over uw ervaring en het soort opdrachten dat u zoekt."></textarea>
+
+              <div class="wizard-step" data-step="3">
+                <div class="form-row">
+                  <div class="field">
+                    <label for="af-regio">Regio</label>
+                    <select id="af-regio" name="regio" required>
+                      <option value="">Kies</option>
+                      <option>Antwerpen</option>
+                      <option>Oost-Vlaanderen</option>
+                      <option>West-Vlaanderen</option>
+                      <option>Vlaams-Brabant / Brussel</option>
+                      <option>Limburg</option>
+                      <option>Walloni&euml;</option>
+                      <option>Nederland</option>
+                    </select>
+                  </div>
+                  <div class="field"><label for="af-beschikbaar">Beschikbaar vanaf</label><input type="date" id="af-beschikbaar" name="beschikbaar" required></div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="af-looptijd">Voorkeur looptijd</label>
+                    <select id="af-looptijd" name="looptijd">
+                      <option>Geen voorkeur</option>
+                      <option>Ad-hoc (dagen tot weken)</option>
+                      <option>Projecten</option>
+                      <option>Structureel (6 tot 24 maanden)</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="af-werkwijze">Werkwijze</label>
+                    <select id="af-werkwijze" name="werkwijze">
+                      <option>Geen voorkeur</option>
+                      <option>Op locatie</option>
+                      <option>Hybride</option>
+                      <option>Grotendeels remote</option>
+                    </select>
+                  </div>
+                </div>
+                <label class="af-file" id="af-drop">
+                  <input type="file" name="cv" id="af-cv" accept=".pdf,.doc,.docx">
+                  <b>Cv opladen</b><span id="af-cv-name">PDF of Word, max. 10 MB &middot; optioneel</span>
+                </label>
+                <label class="af-check"><input type="checkbox" name="toestemming" value="ja" required><span>Ik ga akkoord dat Mainfold mijn gegevens bewaart om mij opdrachten voor te stellen, volgens het <a href="privacybeleid.html">privacybeleid</a>. Ik kan dit op elk moment intrekken.</span></label>
+                <div class="af-msg" id="af-msg-3"></div>
               </div>
-              <button type="submit" class="btn btn-primary" style="width:100%;">Verstuur sollicitatie</button>
+
+              <div class="wizard-step" data-step="success">
+                <div class="wizard-success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <h2 class="text-heading-sm" style="margin-bottom:4px;">Bedankt, je aanmelding is binnen.</h2>
+                <p class="carbon">We nemen binnen &eacute;&eacute;n werkdag contact op voor een korte kennismaking.</p>
+              </div>
+
+              <div class="wizard-nav af-nav-js" id="af-nav">
+                <button type="button" class="btn btn-ghost btn-sm" id="af-prev" style="visibility:hidden;">Vorige</button>
+                <span class="form-note" style="margin:0;">We reageren binnen &eacute;&eacute;n werkdag.</span>
+                <button type="button" class="btn btn-primary" id="af-next">Volgende</button>
+              </div>
+
               <p class="form-note">Door dit formulier te verzenden gaat u akkoord dat Mainfold contact met u opneemt over uw aanvraag. Wij delen uw gegevens nooit met derden.</p>
-              <div class="form-success">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-                <span>Bedankt. Uw sollicitatie is genoteerd, wij nemen binnen één werkdag contact op.</span>
-              </div>
-              <div class="form-error">
-                <span>Er ging iets mis bij het verzenden. Probeer het opnieuw, of mail ons rechtstreeks op <a href="mailto:info@mainfold.be" style="color:inherit;">info@mainfold.be</a>.</span>
-              </div>
+              <button type="submit" class="btn btn-primary af-native-submit" style="width:100%;">Verstuur aanmelding</button>
             </form>
           </div>
 
@@ -462,7 +531,7 @@
         <h4>Voor consultants</h4>
         <ul>
           <li><a href="voor-consultants.html">Overzicht</a></li>
-          <li><a href="contact.html#consultants">Meld je aan als consultant</a></li>
+          <li><a href="aanmelden-consultants.html">Meld je aan als consultant</a></li>
         </ul>
       </div>
       <div class="footer-col">
