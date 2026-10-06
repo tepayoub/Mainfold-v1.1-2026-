@@ -1,0 +1,3 @@
+# Nooit committen: lokale geheimen (bv. de Resend API-key voor send-lead.php)
+secrets.php
+.env
