@@ -1,0 +1,38 @@
+# Mainfold
+
+> Mainfold is een IT/OT-cybersecurity en technology consulting bedrijf in de Benelux (België, Nederland, Luxemburg). Mainfold bemiddelt senior IT/OT-cybersecurity- en cloudconsultants naar middelgrote en grote organisaties, als bemiddelaar (geen uitzendbureau). Leveringsvormen: ad-hoc inzet, projecten, en structurele plaatsing (6 tot 24 maanden). Mainfold vult de interne IT-afdeling van een klant aan, zolang als nodig, zonder die te vervangen.
+
+## Voor bedrijven
+
+- [Voor bedrijven](https://mainfold.be/voor-bedrijven.html): overzicht van wat Mainfold voor organisaties doet.
+- [Diensten](https://mainfold.be/diensten.html): ad-hoc inzet, projecten, structurele plaatsing.
+- [Expertise & sectoren](https://mainfold.be/expertise.html): IT/OT-security, cloud, SOC, GRC, segmentatie.
+- [Compliance](https://mainfold.be/compliance.html): NIS2, IEC 62443, ISO 27001.
+- [NIS2-check](https://mainfold.be/nis2-check.html): gratis tool om te checken of een organisatie onder NIS2 valt.
+- [Gratis expertise-scan](https://mainfold.be/gratis-scan.html): persoonlijk adviestraject in 12 vragen.
+- [Cases](https://mainfold.be/cases.html): voorbeeldtrajecten per leveringsvorm.
+- [Sectoren](https://mainfold.be/sector-industrie.html): industrie, energie, financieel, overheid.
+
+## Voor consultants
+
+- [Voor consultants](https://mainfold.be/voor-consultants.html): werken als freelance IT/OT-securityconsultant via Mainfold.
+- [Meld je aan als consultant](https://mainfold.be/aanmelden-consultants.html): aanmeldformulier voor freelance consultants.
+
+## Kennisbank
+
+- [Kennisbank](https://mainfold.be/kennisbank.html): overzicht van alle artikelen.
+- [Wat is NIS2?](https://mainfold.be/wat-is-nis2.html)
+- [Valt mijn bedrijf onder NIS2?](https://mainfold.be/valt-mijn-bedrijf-onder-nis2.html)
+- [IEC 62443 uitgelegd](https://mainfold.be/iec-62443-uitgelegd.html)
+- [IT/OT-segmentatie](https://mainfold.be/it-ot-segmentatie.html)
+- [Cybersecurity-risico's voor productiebedrijven](https://mainfold.be/cybersecurity-risicos-industrie.html)
+- [Ad-hoc, project of structureel](https://mainfold.be/ad-hoc-project-structureel.html)
+- [Kosten van een freelance IT/OT-consultant](https://mainfold.be/kosten-freelance-it-ot-consultant.html)
+- [Bemiddelaar versus uitzendbureau](https://mainfold.be/bemiddelaar-vs-uitzendbureau.html)
+- [Vragen vóór je tekent als freelance consultant](https://mainfold.be/vragen-voor-je-tekent-freelance-consultant.html)
+- [Hoe ziet een opdracht via Mainfold eruit?](https://mainfold.be/hoe-ziet-een-opdracht-eruit.html)
+
+## Over Mainfold
+
+- [Over ons](https://mainfold.be/over-ons.html)
+- [Contact](https://mainfold.be/contact.html): info@mainfold.be, actief vanuit Vlaanderen, België.
