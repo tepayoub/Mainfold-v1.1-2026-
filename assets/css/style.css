@@ -1552,3 +1552,28 @@ html.js .intro-loader.done { display: none; }
 @media (prefers-reduced-motion: reduce) {
   html.js .intro-loader { display: none; }
 }
+
+/* ---------- Cookie consent banner (injected by main.js, site-wide) ---------- */
+.cookie-banner {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 9998;
+  background: var(--ink); color: var(--papier);
+  padding: 20px 24px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(.2,.7,.2,1);
+  box-shadow: var(--shadow-xl);
+}
+.cookie-banner.show { transform: translateY(0); }
+.cookie-banner-inner {
+  max-width: var(--max-width); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+}
+.cookie-banner p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--papier); max-width: 640px; }
+.cookie-banner a { color: var(--signaal); }
+.cookie-banner-actions { display: flex; gap: 12px; flex-shrink: 0; }
+@media (max-width: 640px) {
+  .cookie-banner-inner { flex-direction: column; align-items: stretch; }
+  .cookie-banner-actions .btn { flex: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cookie-banner { transition: none; }
+}

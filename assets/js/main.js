@@ -21,8 +21,89 @@
       .catch(function () { return false; });
   }
 
+  /* ---------- Cookie consent + Google Analytics (GA4) ----------
+     GA4 only ever loads after explicit consent (GDPR/ePrivacy): no
+     script, no cookie, no ping before the visitor clicks "Accepteren".
+     Choice is remembered in localStorage so the banner doesn't return.
+
+     SETUP: replace GA_MEASUREMENT_ID below with the real Measurement
+     ID from analytics.google.com (Beheer -> Gegevensstreams -> uw
+     stream -> Meet-id, vorm "G-XXXXXXXXXX"). Until that's done this
+     stays inactive on purpose (the "XXXX" guard below blocks it), so
+     the site never falsely claims to run analytics it doesn't. */
+  var GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+  var MF_CONSENT_KEY = "mf-cookie-consent";
+
+  function mfLoadGA() {
+    if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID.indexOf("XXXX") !== -1) return;
+    if (window.mfGaLoaded) return;
+    window.mfGaLoaded = true;
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_MEASUREMENT_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag("js", new Date());
+    gtag("config", GA_MEASUREMENT_ID, { anonymize_ip: true });
+  }
+
+  function mfHideCookieBanner() {
+    var banner = document.getElementById("cookie-banner");
+    if (!banner) return;
+    banner.classList.remove("show");
+    setTimeout(function () { banner.remove(); }, 400);
+  }
+
+  function mfShowCookieBanner() {
+    if (document.getElementById("cookie-banner")) return;
+    var banner = document.createElement("div");
+    banner.className = "cookie-banner";
+    banner.id = "cookie-banner";
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-label", "Cookievoorkeuren");
+    banner.innerHTML =
+      '<div class="cookie-banner-inner">' +
+        '<p>We gebruiken cookies om te begrijpen hoe bezoekers onze site gebruiken. Dat gebeurt enkel met uw toestemming. Meer info in ons <a href="privacybeleid.html">privacybeleid</a>.</p>' +
+        '<div class="cookie-banner-actions">' +
+          '<button type="button" class="btn btn-ghost btn-sm on-dark" id="cookie-decline">Weigeren</button>' +
+          '<button type="button" class="btn btn-primary btn-sm" id="cookie-accept">Accepteren</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(banner);
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { banner.classList.add("show"); });
+    });
+    document.getElementById("cookie-accept").addEventListener("click", function () {
+      try { localStorage.setItem(MF_CONSENT_KEY, "granted"); } catch (e) {}
+      mfHideCookieBanner();
+      mfLoadGA();
+    });
+    document.getElementById("cookie-decline").addEventListener("click", function () {
+      try { localStorage.setItem(MF_CONSENT_KEY, "denied"); } catch (e) {}
+      mfHideCookieBanner();
+    });
+  }
+
+  // Exposed so privacybeleid.html can offer a "cookievoorkeuren wijzigen" link.
+  window.mfOpenCookieSettings = function () {
+    mfHideCookieBanner();
+    mfShowCookieBanner();
+  };
+
+  (function mfInitConsent() {
+    var consent = null;
+    try { consent = localStorage.getItem(MF_CONSENT_KEY); } catch (e) {}
+    if (consent === "granted") {
+      mfLoadGA();
+    } else if (consent !== "denied") {
+      mfShowCookieBanner();
+    }
+  })();
+
   /* ---------- Homepage logo-intro loader (index.html only) ----------
-     Placed first in this file so it runs and dismisses even if a
+     Placed early in this file so it runs and dismisses even if a
      later widget below throws; the page itself also carries an inline
      hard-timeout fallback that doesn't depend on this file at all. */
   var introLoader = document.getElementById("intro-loader");
