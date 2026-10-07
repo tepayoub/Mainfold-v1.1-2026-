@@ -49,6 +49,19 @@
     gtag("config", GA_MEASUREMENT_ID, { anonymize_ip: true });
   }
 
+  /* ---------- Conversion tracking ----------
+     Every successful lead (consultant-aanmelding, contact-formulieren,
+     NIS2-check, gratis-scan, looptijd-slider) fires one shared GA4
+     event, "generate_lead", with a "lead_source" parameter that says
+     which form it was. One event name means one Key Event to mark in
+     GA4 covers every conversion on the site. No-ops silently when GA4
+     hasn't loaded yet (no consent, or still the placeholder ID), so
+     this never throws regardless of cookie choice. */
+  function mfTrackConversion(source) {
+    if (typeof window.gtag !== "function") return;
+    window.gtag("event", "generate_lead", { lead_source: source });
+  }
+
   function mfHideCookieBanner() {
     var banner = document.getElementById("cookie-banner");
     if (!banner) return;
@@ -422,6 +435,7 @@
         }).then(function (ok) {
           nis2SendBtn.disabled = false;
           if (ok) {
+            mfTrackConversion("nis2-check");
             var leadFormEl = document.getElementById("nis2-lead-form");
             if (nameEl) nameEl.closest(".form-row").style.display = "none";
             if (leadFormEl) {
@@ -640,6 +654,7 @@
         }).then(function (ok) {
           scanSendBtn.disabled = false;
           if (ok) {
+            mfTrackConversion("gratis-scan");
             var leadFormEl = document.getElementById("scan-lead-form");
             if (nameEl) nameEl.closest(".form-row").style.display = "none";
             if (leadFormEl) {
@@ -711,6 +726,7 @@
         }).then(function (ok) {
           lsSendBtn.disabled = false;
           if (ok) {
+            mfTrackConversion("looptijd-slider");
             var leadFormEl = document.getElementById("ls-lead-form");
             if (leadFormEl) {
               var heading = leadFormEl.querySelector("h3");
@@ -759,6 +775,7 @@
       mfSendLead(payload).then(function (ok) {
         if (submitBtn) submitBtn.disabled = false;
         if (ok) {
+          mfTrackConversion(payload.source);
           if (success) {
             success.classList.add("show");
             success.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -913,6 +930,7 @@
         }).then(function (ok) {
           wizardNext.disabled = false;
           if (ok) {
+            mfTrackConversion("contact-bedrijven");
             wizardBuildSummary();
             wizardShow("success");
             wizardNav.style.display = "none";
@@ -1019,6 +1037,7 @@
       afNext.textContent = "Versturen…";
       afSendLead(afForm).then(function (ok) {
         if (ok) {
+          mfTrackConversion(afForm.getAttribute("data-source") || "aanmelden-consultants");
           afShow("success");
           if (afNav) afNav.style.display = "none";
         } else {
