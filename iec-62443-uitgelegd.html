@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<script>document.documentElement.classList.add("js");</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEC 62443 uitgelegd: de norm voor OT-security · Mainfold</title>
+<meta name="description" content="Wat IEC 62443 precies vraagt, hoe de norm is opgebouwd en waarom klassieke IT-beveiligingsnormen niet volstaan voor industriële omgevingen.">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261015">
+<link rel="canonical" href="https://mainfold.be/iec-62443-uitgelegd.html">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mainfold.be/iec-62443-uitgelegd.html">
+<meta property="og:site_name" content="Mainfold">
+<meta property="og:title" content="IEC 62443 uitgelegd: de norm voor OT-security · Mainfold">
+<meta property="og:description" content="Wat IEC 62443 precies vraagt, hoe de norm is opgebouwd en waarom klassieke IT-beveiligingsnormen niet volstaan voor industriële omgevingen.">
+<meta property="og:image" content="https://mainfold.be/assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="nl_BE">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IEC 62443 uitgelegd: de norm voor OT-security · Mainfold">
+<meta name="twitter:description" content="Wat IEC 62443 precies vraagt, hoe de norm is opgebouwd en waarom klassieke IT-beveiligingsnormen niet volstaan voor industriële omgevingen.">
+<meta name="twitter:image" content="https://mainfold.be/assets/img/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://mainfold.be/#organization",
+  "name": "Mainfold",
+  "url": "https://mainfold.be/",
+  "logo": "https://mainfold.be/assets/img/mainfold-icoon.png",
+  "areaServed": ["Belgium", "Netherlands", "Luxembourg"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mainfold.be/" },
+    { "@type": "ListItem", "position": 2, "name": "Kennisbank", "item": "https://mainfold.be/kennisbank.html" },
+    { "@type": "ListItem", "position": 3, "name": "IEC 62443 uitgelegd" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "IEC 62443 uitgelegd: de norm voor OT-security",
+  "description": "Wat IEC 62443 precies vraagt, hoe de norm is opgebouwd en waarom klassieke IT-beveiligingsnormen niet volstaan voor industriële omgevingen.",
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "inLanguage": "nl-BE",
+  "author": { "@id": "https://mainfold.be/#organization" },
+  "publisher": { "@id": "https://mainfold.be/#organization" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-row">
+    <a href="index.html" class="brand">
+      <img src="assets/img/mainfold-logo.webp" alt="Mainfold" class="brand-logo">
+    </a>
+    <nav class="nav-main">
+      <a href="index.html">Home</a>
+      <a href="voor-bedrijven.html">Voor bedrijven</a>
+      <a href="voor-consultants.html">Voor consultants</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="kennisbank.html">Kennisbank</a>
+      <a href="cases.html">Cases</a>
+      <a href="over-ons.html">Over ons</a>
+    </nav>
+    <div class="nav-right">
+      <a href="contact.html" class="contact-text">Contact</a>
+      <a href="contact.html" class="btn btn-primary btn-sm">Plan een intake</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+  <div class="container mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="voor-bedrijven.html">Voor bedrijven</a>
+    <a href="voor-consultants.html">Voor consultants</a>
+    <a href="compliance.html">Compliance</a>
+    <a href="kennisbank.html">Kennisbank</a>
+    <a href="cases.html">Cases</a>
+    <a href="over-ons.html">Over ons</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="btn btn-primary btn-sm">Plan een intake</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-header">
+    <div class="orb orb-violet" style="width:300px;height:300px;top:-100px;right:-40px;"></div>
+    <div class="container" style="position:relative;">
+      <div class="breadcrumb"><a href="index.html">Home</a> / <a href="kennisbank.html">Kennisbank</a> / IEC 62443 uitgelegd</div>
+      <span class="eyebrow">IT/OT & SECURITY</span>
+      <h1 class="text-display">IEC 62443 uitgelegd: de norm voor OT-security.</h1>
+      <p class="lede text-body-lg carbon">De referentiestandaard voor industriële cybersecurity, zonder de norm zelf te hoeven doorworstelen.</p>
+    </div>
+  </section>
+
+  <section class="section-pad">
+    <div class="container">
+      <article class="kb-article reveal">
+
+        <p class="kb-lead">IEC 62443 is de internationale normenreeks voor de beveiliging van industriële automatiserings- en controlesystemen (IACS): productielijnen, SCADA-systemen, PLC's en alles wat een fabriek, energiecentrale of waterzuivering effectief laat draaien.</p>
+
+        <h2>Waarom OT een eigen norm nodig heeft</h2>
+        <p>Klassieke IT-beveiligingsnormen zoals ISO 27001 zijn gebouwd rond de prioriteit vertrouwelijkheid: data beschermen tegen ongeautoriseerde toegang. In OT-omgevingen ligt de prioriteit omgekeerd: beschikbaarheid staat voorop. Een productielijn die stilvalt kost direct geld en kan zelfs fysiek onveilig zijn. Een patch die 's nachts even een systeem herstart, iets vanzelfsprekends in IT, kan in OT een onaanvaardbaar risico zijn.</p>
+        <p>IEC 62443 is gebouwd vanuit die realiteit: oudere systemen die nog tientallen jaren meegaan, leveranciers met eigen onderhoudscontracten, en processen die simpelweg niet zomaar stilgelegd kunnen worden voor een update.</p>
+
+        <h2>De structuur van de norm</h2>
+        <p>IEC 62443 werkt met twee kernconcepten:</p>
+        <ul>
+          <li><strong>Zones en conduits:</strong> het netwerk wordt opgedeeld in logische zones (bijvoorbeeld kantoor-IT, procescontrole, veldniveau), met gecontroleerde verbindingen (conduits) ertussen. Dat is exact het principe achter <a href="it-ot-segmentatie.html" class="inline-link">IT/OT-segmentatie</a>.</li>
+          <li><strong>Security levels (SL 1 t/m 4):</strong> elke zone krijgt een vereist beveiligingsniveau, van bescherming tegen toevallige blootstelling (SL1) tot bescherming tegen gerichte aanvallen met uitgebreide middelen (SL4). Niet elke zone heeft hetzelfde niveau nodig.</li>
+        </ul>
+
+        <h2>Is IEC 62443 wettelijk verplicht?</h2>
+        <p>Niet rechtstreeks: het is een technische norm, geen wet. Maar in de praktijk wordt ze steeds vaker de facto verwacht, zeker bij organisaties die onder <a href="wat-is-nis2.html" class="inline-link">NIS2</a> vallen. Auditors en klanten in de keten gebruiken IEC 62443 vaak als referentiekader om aan te tonen dat OT-beveiliging "state of the art" is.</p>
+
+        <h2>Hoe een traject er praktisch uitziet</h2>
+        <p>De meeste organisaties starten met een gap-analyse: een inventaris van de huidige OT-omgeving, afgezet tegen de zones, conduits en security levels die IEC 62443 vraagt. Daaruit volgt een prioriteitenlijst, van quick wins (zoals het scheiden van duidelijk ongerelateerde netwerksegmenten) tot langetermijnwerk (zoals het vervangen van systemen die structureel niet te patchen zijn).</p>
+        <p>Dat vraagt een combinatie die zelden standaard in een IT-team zit: kennis van industriële protocollen, begrip van productieprocessen, en klassieke cybersecurity-expertise tegelijk.</p>
+  
+      </article>
+
+    </div>
+  </section>
+
+  <section class="section-pad bg-mist">
+    <div class="container">
+      <div class="cta-band bg-ink reveal">
+        <div class="orb orb-cyan" style="bottom:-140px; right:-60px;"></div>
+        <span class="eyebrow on-dark" style="position:relative;">OT-EXPERTISE</span>
+        <h2 class="text-heading-lg" style="position:relative; color:var(--white);">IEC 62443-kennis die zeldzaam is op de arbeidsmarkt.</h2>
+        <p class="carbon-on-dark text-body-lg" style="position:relative; max-width:560px; margin:0 auto;">Onze consultants combineren OT-praktijkervaring met security-expertise, specifiek voor industriële omgevingen.</p>
+        <div class="cta-actions" style="position:relative;">
+          <a href="expertise.html" class="btn btn-primary" style="background:var(--white); color:var(--ink);">Bekijk onze IT/OT-expertise</a>
+          <a href="contact.html#bedrijven" class="btn btn-ghost on-dark">Plan een gesprek</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <img src="assets/img/mainfold-logo-wit.webp" alt="Mainfold" class="brand-logo">
+        </a>
+        <p>IT/OT Cybersecurity &amp; Technology Consulting voor middelgrote en grote organisaties in de Benelux.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Voor bedrijven</h4>
+        <ul>
+          <li><a href="voor-bedrijven.html">Overzicht</a></li>
+          <li><a href="diensten.html">Diensten</a></li>
+          <li><a href="expertise.html">Expertise &amp; sectoren</a></li>
+          <li><a href="compliance.html">Compliance</a></li>
+          <li><a href="gratis-scan.html">Gratis expertise-scan</a></li>
+          <li><a href="cases.html">Cases</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Voor consultants</h4>
+        <ul>
+          <li><a href="voor-consultants.html">Overzicht</a></li>
+          <li><a href="aanmelden-consultants.html">Meld je aan als consultant</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@mainfold.be">info@mainfold.be</a></li>
+          <li><a href="over-ons.html">Over ons</a></li>
+          <li><a href="contact.html">Vlaanderen, België</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-share">
+      <span class="text-caption">DEEL</span>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmainfold.be%2Fiec-62443-uitgelegd.html" target="_blank" rel="noopener noreferrer" aria-label="Deel op LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.8v2.1h.1c.5-1 1.8-2.1 3.7-2.1 4 0 4.7 2.6 4.7 6v9h-4v-8c0-2 0-4.5-2.7-4.5s-3.1 2.1-3.1 4.3V23h-4V8z"/></svg></a>
+      <a href="mailto:?subject=IEC%2062443%20uitgelegd:%20de%20norm%20voor%20OT-security&body=https%3A//mainfold.be/iec-62443-uitgelegd.html" aria-label="Deel via e-mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></a>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Mainfold. Alle rechten voorbehouden. · <a href="privacybeleid.html" style="color:inherit;">Privacybeleid</a></span>
+      <span>Vlaanderen, België</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js?v=20261015"></script>
+</body>
+</html>

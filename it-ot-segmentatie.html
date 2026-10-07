@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<script>document.documentElement.classList.add("js");</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT/OT-segmentatie: waarom kantoor en fabriek gescheiden moeten zijn · Mainfold</title>
+<meta name="description" content="Hoe een ongesegmenteerd netwerk een kantoorincident rechtstreeks tot op de productievloer laat doorlopen, en hoe segmentatie dat voorkomt.">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261015">
+<link rel="canonical" href="https://mainfold.be/it-ot-segmentatie.html">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mainfold.be/it-ot-segmentatie.html">
+<meta property="og:site_name" content="Mainfold">
+<meta property="og:title" content="IT/OT-segmentatie: waarom kantoor en fabriek gescheiden moeten zijn · Mainfold">
+<meta property="og:description" content="Hoe een ongesegmenteerd netwerk een kantoorincident rechtstreeks tot op de productievloer laat doorlopen, en hoe segmentatie dat voorkomt.">
+<meta property="og:image" content="https://mainfold.be/assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="nl_BE">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IT/OT-segmentatie: waarom kantoor en fabriek gescheiden moeten zijn · Mainfold">
+<meta name="twitter:description" content="Hoe een ongesegmenteerd netwerk een kantoorincident rechtstreeks tot op de productievloer laat doorlopen, en hoe segmentatie dat voorkomt.">
+<meta name="twitter:image" content="https://mainfold.be/assets/img/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://mainfold.be/#organization",
+  "name": "Mainfold",
+  "url": "https://mainfold.be/",
+  "logo": "https://mainfold.be/assets/img/mainfold-icoon.png",
+  "areaServed": ["Belgium", "Netherlands", "Luxembourg"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mainfold.be/" },
+    { "@type": "ListItem", "position": 2, "name": "Kennisbank", "item": "https://mainfold.be/kennisbank.html" },
+    { "@type": "ListItem", "position": 3, "name": "IT/OT-segmentatie" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "IT/OT-segmentatie: waarom kantoor en fabriek gescheiden moeten zijn",
+  "description": "Hoe een ongesegmenteerd netwerk een kantoorincident rechtstreeks tot op de productievloer laat doorlopen, en hoe segmentatie dat voorkomt.",
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "inLanguage": "nl-BE",
+  "author": { "@id": "https://mainfold.be/#organization" },
+  "publisher": { "@id": "https://mainfold.be/#organization" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-row">
+    <a href="index.html" class="brand">
+      <img src="assets/img/mainfold-logo.webp" alt="Mainfold" class="brand-logo">
+    </a>
+    <nav class="nav-main">
+      <a href="index.html">Home</a>
+      <a href="voor-bedrijven.html">Voor bedrijven</a>
+      <a href="voor-consultants.html">Voor consultants</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="kennisbank.html">Kennisbank</a>
+      <a href="cases.html">Cases</a>
+      <a href="over-ons.html">Over ons</a>
+    </nav>
+    <div class="nav-right">
+      <a href="contact.html" class="contact-text">Contact</a>
+      <a href="contact.html" class="btn btn-primary btn-sm">Plan een intake</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+  <div class="container mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="voor-bedrijven.html">Voor bedrijven</a>
+    <a href="voor-consultants.html">Voor consultants</a>
+    <a href="compliance.html">Compliance</a>
+    <a href="kennisbank.html">Kennisbank</a>
+    <a href="cases.html">Cases</a>
+    <a href="over-ons.html">Over ons</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="btn btn-primary btn-sm">Plan een intake</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-header">
+    <div class="orb orb-violet" style="width:300px;height:300px;top:-100px;right:-40px;"></div>
+    <div class="container" style="position:relative;">
+      <div class="breadcrumb"><a href="index.html">Home</a> / <a href="kennisbank.html">Kennisbank</a> / IT/OT-segmentatie</div>
+      <span class="eyebrow">IT/OT & SECURITY</span>
+      <h1 class="text-display">IT/OT-segmentatie: waarom kantoor en fabriek gescheiden moeten zijn.</h1>
+      <p class="lede text-body-lg carbon">Eén ongesegmenteerd netwerk is de snelste weg van een phishingmail in de boekhouding naar een stilgevallen productielijn.</p>
+    </div>
+  </section>
+
+  <section class="section-pad">
+    <div class="container">
+      <article class="kb-article reveal">
+
+        <p class="kb-lead">Veel organisaties ontdekken pas tijdens een incident dat hun kantoornetwerk en hun productienetwerk eigenlijk één groot netwerk zijn. Op dat moment is het te laat: een ransomware-besmetting die begint op een laptop in de boekhouding, kan zich dan ongehinderd verspreiden tot op de PLC die de productielijn aanstuurt.</p>
+
+        <h2>Wat er misgaat zonder segmentatie</h2>
+        <p>Een typisch scenario: een medewerker opent een kwaadaardige bijlage. De malware verspreidt zich via het interne netwerk, op zoek naar waardevolle of kwetsbare systemen. In een ongesegmenteerd netwerk is er niets dat haar tegenhoudt om van de kantooromgeving door te steken naar de procescontrolelaag, en van daaruit naar het veldniveau waar PLC's en sensoren zitten.</p>
+        <p>Het resultaat is zelden "enkel" dataverlies. Productielijnen die onverwacht stilvallen, veiligheidsklep­pen die niet reageren zoals verwacht, of een volledige productiestop tot de omgeving weer vertrouwd is: de impact van een IT-incident wordt in dat scenario een fysiek, operationeel probleem.</p>
+
+        <h2>Hoe segmentatie werkt</h2>
+        <p>Het uitgangspunt, zoals ook vastgelegd in <a href="iec-62443-uitgelegd.html" class="inline-link">IEC 62443</a>, is eenvoudig: verdeel het netwerk in logische zones naargelang functie en risiconiveau, en controleer strikt wat tussen die zones mag passeren.</p>
+        <ul>
+          <li><strong>Kantoor-IT:</strong> e-mail, bestandsdeling, internettoegang. Hoog risico op initiële besmetting, lage directe impact op productie.</li>
+          <li><strong>Procescontrolelaag:</strong> SCADA, historians, engineering workstations. Hier moet verkeer vanuit kantoor-IT expliciet en beperkt worden toegelaten, nooit standaard open.</li>
+          <li><strong>Veldniveau:</strong> PLC's, sensoren, actuatoren. Het meest kritieke niveau, met de strengste toegangscontrole.</li>
+        </ul>
+        <p>Tussen elke zone zit een "conduit": een bewust gecontroleerd punt, vaak een firewall of gateway, die enkel strikt noodzakelijk verkeer doorlaat. Geen platte netwerkstructuur meer, maar een reeks poorten die elk apart bewaakt worden.</p>
+
+        <h2>Praktische eerste stappen</h2>
+        <p>Een volledige herstructurering gebeurt zelden in één keer. Een realistisch traject begint met:</p>
+        <ul>
+          <li>Een inventaris van wat er effectief op het netwerk zit, inclusief verouderde of "vergeten" systemen.</li>
+          <li>Het identificeren van de duidelijkste scheidingslijnen: welke systemen hebben echt geen reden om rechtstreeks met elkaar te praten?</li>
+          <li>Het stap voor stap invoeren van firewalls of VLAN's op die scheidingslijnen, met monitoring om te zien wat er effectief doorheen gaat.</li>
+        </ul>
+        <p>Het is geen project dat je in een weekend afrondt, maar wel een van de meest impactvolle maatregelen tegen de grootste risico's, zoals ook blijkt uit <a href="cybersecurity-risicos-industrie.html" class="inline-link">de grootste cybersecurity-risico's voor productiebedrijven</a>.</p>
+  
+      </article>
+
+    </div>
+  </section>
+
+  <section class="section-pad bg-mist">
+    <div class="container">
+      <div class="cta-band bg-ink reveal">
+        <div class="orb orb-cyan" style="bottom:-140px; right:-60px;"></div>
+        <span class="eyebrow on-dark" style="position:relative;">SEGMENTATIE IN DE PRAKTIJK</span>
+        <h2 class="text-heading-lg" style="position:relative; color:var(--white);">Zie het verschil tussen een ongesegmenteerd en een gesegmenteerd netwerk.</h2>
+        <p class="carbon-on-dark text-body-lg" style="position:relative; max-width:560px; margin:0 auto;">Op onze expertisepagina tonen we visueel hoe een incident zich verspreidt, met en zonder segmentatie.</p>
+        <div class="cta-actions" style="position:relative;">
+          <a href="expertise.html" class="btn btn-primary" style="background:var(--white); color:var(--ink);">Bekijk de segmentatie-demo</a>
+          <a href="contact.html#bedrijven" class="btn btn-ghost on-dark">Plan een gesprek</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <img src="assets/img/mainfold-logo-wit.webp" alt="Mainfold" class="brand-logo">
+        </a>
+        <p>IT/OT Cybersecurity &amp; Technology Consulting voor middelgrote en grote organisaties in de Benelux.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Voor bedrijven</h4>
+        <ul>
+          <li><a href="voor-bedrijven.html">Overzicht</a></li>
+          <li><a href="diensten.html">Diensten</a></li>
+          <li><a href="expertise.html">Expertise &amp; sectoren</a></li>
+          <li><a href="compliance.html">Compliance</a></li>
+          <li><a href="gratis-scan.html">Gratis expertise-scan</a></li>
+          <li><a href="cases.html">Cases</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Voor consultants</h4>
+        <ul>
+          <li><a href="voor-consultants.html">Overzicht</a></li>
+          <li><a href="aanmelden-consultants.html">Meld je aan als consultant</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@mainfold.be">info@mainfold.be</a></li>
+          <li><a href="over-ons.html">Over ons</a></li>
+          <li><a href="contact.html">Vlaanderen, België</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-share">
+      <span class="text-caption">DEEL</span>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmainfold.be%2Fit-ot-segmentatie.html" target="_blank" rel="noopener noreferrer" aria-label="Deel op LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.8v2.1h.1c.5-1 1.8-2.1 3.7-2.1 4 0 4.7 2.6 4.7 6v9h-4v-8c0-2 0-4.5-2.7-4.5s-3.1 2.1-3.1 4.3V23h-4V8z"/></svg></a>
+      <a href="mailto:?subject=IT/OT-segmentatie:%20waarom%20kantoor%20en%20fabriek%20gescheiden%20moeten%20zijn&body=https%3A//mainfold.be/it-ot-segmentatie.html" aria-label="Deel via e-mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></a>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Mainfold. Alle rechten voorbehouden. · <a href="privacybeleid.html" style="color:inherit;">Privacybeleid</a></span>
+      <span>Vlaanderen, België</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js?v=20261015"></script>
+</body>
+</html>
