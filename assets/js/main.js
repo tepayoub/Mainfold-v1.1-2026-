@@ -26,12 +26,12 @@
      script, no cookie, no ping before the visitor clicks "Accepteren".
      Choice is remembered in localStorage so the banner doesn't return.
 
-     SETUP: replace GA_MEASUREMENT_ID below with the real Measurement
-     ID from analytics.google.com (Beheer -> Gegevensstreams -> uw
-     stream -> Meet-id, vorm "G-XXXXXXXXXX"). Until that's done this
-     stays inactive on purpose (the "XXXX" guard below blocks it), so
-     the site never falsely claims to run analytics it doesn't. */
-  var GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+     GA_MEASUREMENT_ID is the real Measurement ID from
+     analytics.google.com (Beheer -> Gegevensstreams -> stream ->
+     Meet-id). The "XXXX" guard below is a safety net: if this ever
+     gets reset to the placeholder, GA4 stays inactive instead of
+     silently erroring. */
+  var GA_MEASUREMENT_ID = "G-N1CK1KFWLQ";
   var MF_CONSENT_KEY = "mf-cookie-consent";
 
   function mfLoadGA() {
